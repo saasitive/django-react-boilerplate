@@ -3,3 +3,4 @@ djoser==2.0.5
 djangorestframework==3.11.2 # https://github.com/sunscrapers/djoser/issues/541
 markdown==3.3 
 django-filter==2.4.0
+django_cors_headers==3.5.0

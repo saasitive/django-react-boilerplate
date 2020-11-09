@@ -6,6 +6,9 @@ import { withRouter } from "react-router-dom";
 import { Container, Navbar, Nav } from "react-bootstrap";
 import { logout } from "../login/LoginActions";
 
+import NotesList from "../notes/NotesList";
+import AddNote from "../notes/AddNote";
+
 class Dashboard extends Component {
   onLogout = () => {
     this.props.logout();
@@ -26,7 +29,8 @@ class Dashboard extends Component {
           </Navbar.Collapse>
         </Navbar>
         <Container>
-          <h1>Dashboard</h1>
+          <NotesList />
+          <AddNote />
         </Container>
       </div>
     );

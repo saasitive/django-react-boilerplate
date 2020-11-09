@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'djoser',
     'corsheaders',
     #
-    'apps.accounts' 
+    'apps.accounts',
+    'apps.notes'
 ]
 
 #configure DRF

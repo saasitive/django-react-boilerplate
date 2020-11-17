@@ -15,17 +15,17 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'h#x**24jxd+#jvy0b3jl@y*n6twri!*29iltl(4i7w#5^3xv$o'
+SECRET_KEY = "j+qxsyi2xv!6lkv-hn)c$qxeo+t#1r#)0s)o^yh)ds#k%%19tm"
 
+# 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False 
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['0.0.0.0', 'boilerplate.saasitive.com', 'www.boilerplate.saasitive.com']
 
 
 # Application definition
@@ -64,8 +64,7 @@ DJOSER = {
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    
+    "http://127.0.0.1:3000"
 ]
 
 MIDDLEWARE = [
@@ -147,4 +146,6 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static/'
+MEDIA_URL = '/media/'
+STATIC_URL = '/django_static/' 
+STATIC_ROOT = BASE_DIR / 'django_static'

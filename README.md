@@ -17,10 +17,10 @@ You can play with this bolierplate at: [https://boilerplate.saasitive.com](https
 
 ## Screenshots
 
-![](https://raw.githubusercontent.com/saasitive/media/main/home_view.png)
+<kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/home_view.png" /></kbd>
 
-![](https://raw.githubusercontent.com/saasitive/media/main/signup.png)
+<kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/signup.png" /></kbd>
 
-![](https://raw.githubusercontent.com/saasitive/media/main/login.png)
+<kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/login.png" /></kbd>
 
-![](https://raw.githubusercontent.com/saasitive/media/main/dashboard.png)
+<kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/dashboard.png" /></kbd>

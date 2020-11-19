@@ -14,7 +14,9 @@ I decided to create a simple Django+React boilerplate with step-by-step instruct
 - PostgreSQL database (not yet configured)
 - Authentication with DRF `authtoken` and [Djoser](https://djoser.readthedocs.io/en/latest/)
 - AWS SES for Email sending (not yet implemented)
+- python-decuple for secrets
 - Payments with Stripe (not yet implemented)
+- Step-by-step instructions how to deploy and how to update application
 
 ## Live Website
 

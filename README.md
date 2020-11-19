@@ -1,6 +1,8 @@
 # DIY Django and React Boilerplate
 
-It is do-it-yourself Django + React Boilerplate for starting your SaaS application. In existing boilerplates for Django+React (or just for Django) there are very often too many features provided (do you really need traefik for testing your idea?). So if you want to start with boilerplate, you first need to remove a lot of functionality that you don't need or simply don't understand. I decided to create simple Django+React boilerplate with step-by-step instructions how to build it. During building you can decide what you need or not. And for sure you learn a lot about Django and React. I hope it will provide good and quick starting point for creating SaaS applications. I would like to create real SaaS applications based on this boilerplate with step-by-step tutorials how they were created. They will be available at [SaaSitive](https://saasitive.com) website.
+It is do-it-yourself Django + React Boilerplate for starting your SaaS application. In existing boilerplates for Django+React (or just for Django) there are very often too many features provided (do you really need traefik for MVP?). So before starting, you need to remove a lot of functionality that you don't need or simply don't understand. 
+
+I decided to create a simple Django+React boilerplate with step-by-step instructions how to build it. During building you can decide what you need or not. And for sure you learn a lot about Django and React. I hope it will provide good and quick starting point for creating SaaS applications. I would like to create real SaaS applications based on this boilerplate with step-by-step tutorials how they were created. They will be available at [SaaSitive](https://saasitive.com) website.
 
 ## Features (already implemented or planned)
 
@@ -26,6 +28,8 @@ You can play with this bolierplate at: [https://boilerplate.saasitive.com](https
 5. [React Authenticated Component](https://saasitive.com/tutorial/react-authenticated-component/) 
 6. [CRUD in Django Rest Framework and React](https://saasitive.com/tutorial/crud-django-rest-framework-react/)
 7. [Docker-Compose for Django and React with Nginx reverse-proxy and Let's encrypt certificate](https://saasitive.com/tutorial/docker-compose-django-react-nginx-let-s-encrypt/)
+
+More articles coming soon!
 
 ## Screenshots
 

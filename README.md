@@ -1,4 +1,4 @@
-# DIY Django and React Boilerplate
+# DIY Django and React Boilerplate for SaaS
 
 It is do-it-yourself Django + React Boilerplate for starting your SaaS application. In existing boilerplates for Django+React (or just for Django) there are very often too many features provided (do you really need traefik for MVP?). So before starting, you need to remove a lot of functionality that you don't need or simply don't understand. 
 

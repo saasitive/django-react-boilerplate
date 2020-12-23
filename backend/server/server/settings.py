@@ -23,9 +23,9 @@ SECRET_KEY = "j+qxsyi2xv!6lkv-hn)c$qxeo+t#1r#)0s)o^yh)ds#k%%19tm"
 
 # 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False 
+DEBUG = True 
 
-ALLOWED_HOSTS = ['0.0.0.0', 'boilerplate.saasitive.com', 'www.boilerplate.saasitive.com']
+ALLOWED_HOSTS = ['127.0.0.1', '0.0.0.0', 'boilerplate.saasitive.com', 'www.boilerplate.saasitive.com']
 
 
 # Application definition
@@ -59,8 +59,18 @@ REST_FRAMEWORK = {
 
 # configure Djoser
 DJOSER = {
-    "USER_ID_FIELD": "username"
+    "USER_ID_FIELD": "username",
+    "LOGIN_FIELD": "email",
+    "SEND_ACTIVATION_EMAIL": True,
+    "ACTIVATION_URL": "activate/{uid}/{token}",
+    'SERIALIZERS': {
+        'token_create': 'apps.accounts.serializers.CustomTokenCreateSerializer',
+    },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+SITE_NAME = "SaaSitive"
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

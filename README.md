@@ -30,6 +30,8 @@ You can play with this bolierplate at: [https://boilerplate.saasitive.com](https
 5. [React Authenticated Component](https://saasitive.com/tutorial/react-authenticated-component/) 
 6. [CRUD in Django Rest Framework and React](https://saasitive.com/tutorial/crud-django-rest-framework-react/)
 7. [Docker-Compose for Django and React with Nginx reverse-proxy and Let's encrypt certificate](https://saasitive.com/tutorial/docker-compose-django-react-nginx-let-s-encrypt/)
+8. [Django Rest Framework Email Verification](https://saasitive.com/tutorial/django-rest-framework-email-verification/)
+
 
 More articles coming soon!
 

@@ -23,15 +23,15 @@ I decided to create a simple Django+React boilerplate with step-by-step instruct
 You can play with this bolierplate at: [https://boilerplate.saasitive.com](https://boilerplate.saasitive.com) - deployed to t2.micro EC2 instance with docker-compose.
 
 ## Step-by-step instructions:
-1. [Starting SaaS with Django and React](https://saasitive.com/tutorial/django-react-boilerplate-saas/) 
-2. [React Routing and Components for Signup and Login](https://saasitive.com/tutorial/react-routing-components-signup-login/)
-3. [Token Based Authentication with Django Rest Framework and Djoser](https://saasitive.com/tutorial/token-based-authentication-django-rest-framework-djoser/)
-4. [React Token Based Authentication to Django REST API Backend](https://saasitive.com/tutorial/react-token-based-authentication-django/)
-5. [React Authenticated Component](https://saasitive.com/tutorial/react-authenticated-component/) 
-6. [CRUD in Django Rest Framework and React](https://saasitive.com/tutorial/crud-django-rest-framework-react/)
-7. [Docker-Compose for Django and React with Nginx reverse-proxy and Let's encrypt certificate](https://saasitive.com/tutorial/docker-compose-django-react-nginx-let-s-encrypt/)
-8. [Django Rest Framework Email Verification](https://saasitive.com/tutorial/django-rest-framework-email-verification/)
-9. [Django Rest Framework Reset Password](https://saasitive.com/tutorial/django-rest-framework-reset-password/)
+1. [Starting SaaS with Django and React](https://saasitive.com/tutorial/django-react-boilerplate-saas/) (tag [v1](https://github.com/saasitive/django-react-boilerplate/tree/v1)) 
+2. [React Routing and Components for Signup and Login](https://saasitive.com/tutorial/react-routing-components-signup-login/) (tag [v2](https://github.com/saasitive/django-react-boilerplate/tree/v2))
+3. [Token Based Authentication with Django Rest Framework and Djoser](https://saasitive.com/tutorial/token-based-authentication-django-rest-framework-djoser/) (tag [v3](https://github.com/saasitive/django-react-boilerplate/tree/v3))
+4. [React Token Based Authentication to Django REST API Backend](https://saasitive.com/tutorial/react-token-based-authentication-django/) (tag [v4](https://github.com/saasitive/django-react-boilerplate/tree/v4))
+5. [React Authenticated Component](https://saasitive.com/tutorial/react-authenticated-component/)  (tag [v5](https://github.com/saasitive/django-react-boilerplate/tree/v5))
+6. [CRUD in Django Rest Framework and React](https://saasitive.com/tutorial/crud-django-rest-framework-react/) (tag [v6](https://github.com/saasitive/django-react-boilerplate/tree/v6))
+7. [Docker-Compose for Django and React with Nginx reverse-proxy and Let's encrypt certificate](https://saasitive.com/tutorial/docker-compose-django-react-nginx-let-s-encrypt/) (tag [v7](https://github.com/saasitive/django-react-boilerplate/tree/v7))
+8. [Django Rest Framework Email Verification](https://saasitive.com/tutorial/django-rest-framework-email-verification/) (tag [v8](https://github.com/saasitive/django-react-boilerplate/tree/v8))
+9. [Django Rest Framework Reset Password](https://saasitive.com/tutorial/django-rest-framework-reset-password/) (tag [v9](https://github.com/saasitive/django-react-boilerplate/tree/v9))
 
 
 More articles coming soon!

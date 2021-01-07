@@ -31,7 +31,18 @@ export const getCurrentUser = redirectTo => dispatch => {
     })
     .catch(error => {
       dispatch(unsetCurrentUser());
-      toastOnError(error);
+      if (error.response) {
+        if (
+          error.response.status === 401 &&
+          error.response.hasOwnProperty("data") &&
+          error.response.data.hasOwnProperty("detail") &&
+          error.response.data["detail"] === "User inactive or deleted."
+        ) {
+          dispatch(push("/resend_activation"));
+        }
+      } else {
+        toastOnError(error);
+      }
     });
 };
 

@@ -11,7 +11,7 @@ class Login extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: "",
+      email: "",
       password: ""
     };
   }
@@ -21,7 +21,7 @@ class Login extends Component {
 
   onLoginClick = () => {
     const userData = {
-      username: this.state.username,
+      email: this.state.email,
       password: this.state.password
     };
     this.props.login(userData, "/dashboard");
@@ -33,13 +33,13 @@ class Login extends Component {
           <Col md="4">
             <h1>Login</h1>
             <Form>
-              <Form.Group controlId="usernameId">
-                <Form.Label>User name</Form.Label>
+              <Form.Group controlId="emailId">
+                <Form.Label>Your Email</Form.Label>
                 <Form.Control
                   type="text"
-                  name="username"
-                  placeholder="Enter user name"
-                  value={this.state.username}
+                  name="email"
+                  placeholder="Enter email"
+                  value={this.state.email}
                   onChange={this.onChange}
                 />
               </Form.Group>
@@ -60,6 +60,10 @@ class Login extends Component {
             </Button>
             <p className="mt-2">
               Don't have account? <Link to="/signup">Signup</Link>
+            </p>
+            <p className="mt-2">
+              Forget password?{" "}
+              <Link to="/send_reset_password">Reset Password</Link>
             </p>
           </Col>
         </Row>

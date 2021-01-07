@@ -72,6 +72,12 @@ DJOSER = {
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_NAME = "SaaSitive"
 
+PROTOCOL = "http"
+DOMAIN = "localhost:3000"
+if not DEBUG:
+    PROTOCOL = "https"
+    DOMAIN = "boilerplate.saasitive.com"
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",

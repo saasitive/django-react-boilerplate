@@ -1,0 +1,77 @@
+.transparent{
+    position: absolute;
+    border-radius: 25px;
+}
+
+.transparent-two-small{
+    background-color: yellow;
+    height: 12%;
+    width: 58%;
+    margin: 15% 4%;
+}
+
+.transparent-two{
+    background-color: pink;
+    height: 15%;
+    width: 82%;
+    margin: 22% 10%;
+}
+
+.transparent-three{
+    background-color: beige;
+    height: 15%;
+    width: 55%;
+    margin: 28% 0px;
+    margin-left: 32%;
+}
+
+@media screen and ( min-width: 900px ){
+    h1.carousel-text{
+        font-size: 5.5vw !important;
+    }
+
+    h2.carousel-text{
+        font-size: 5vw !important;
+    }
+    
+}
+
+.carousel-text{
+    position: absolute;
+    font-family: 'Unica One';
+    color: whitesmoke;
+    font-weight: bolder;
+    left: 0px;
+    right: 0px;
+    padding: 15%;
+}
+
+h1.carousel-text{
+    font-size: 8vw;
+    color: saddlebrown;
+}
+
+h2.carousel-text{
+    font-size: 7vw;
+}
+
+h2.one{
+    padding-top: 32.5%;
+}
+
+h1.two{
+    padding: 21% 0;
+    color: chocolate;
+}
+
+h2.two{
+    right: unset;
+    padding: 15% 5%;
+    color: darkslateblue;
+}
+
+h1.three{
+    color: sienna;
+    padding: 28% 0px;
+    margin-left: 17.5%;
+}

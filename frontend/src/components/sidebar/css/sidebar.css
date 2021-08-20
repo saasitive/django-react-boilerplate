@@ -1,0 +1,107 @@
+/************
+ Sidebar
+*************/
+#sidebar {
+    height: 100%;
+}
+
+
+#sidebar-aside {
+    background: #f2f3f7;
+    height: 100%;
+}
+
+#sidebar-aside::-webkit-scrollbar-track
+{
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    border-radius: 10px;
+    background-color: #F5F5F5;
+}
+
+#sidebar-aside::-webkit-scrollbar
+{
+    width: 5px;
+    height: 5px;
+    background-color: #F5F5F5;
+}
+
+#sidebar-aside::-webkit-scrollbar-thumb
+{
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+    border-radius: 10px;
+    background-color: #555;
+}
+
+#sidebar-aside > div {
+    text-align: center;
+}
+
+.open-sidebar-btn {
+    width: 2.5em !important;
+    height: 2.5em !important;
+    position: fixed;
+    top: 0;
+    z-index: 1000;
+    cursor: pointer;
+}
+
+
+@media screen and ( min-width: 900px ){
+    .open-sidebar-btn {
+        display: none !important;
+    }
+}
+
+/************
+ Profile
+*************/
+
+.author-image {
+    width: 300px;
+}
+
+#author-name{
+    text-align: center;
+    display: block;
+    font-family: "PlayFair Display", Georgia, serif;
+    font-weight: 700;
+    font-size: 30px;
+    line-height: 1.1;
+}
+
+.email{
+    display: block;
+    font-size: 12px;
+    line-height: 1.8;
+}
+
+.email > svg {
+    padding-right: 5px;
+}
+
+/************
+ Navigation
+*************/
+
+#aside-navigation{
+    
+}
+
+/************
+ Social Media
+*************/
+
+#aside-social-media {
+    width: 300px;
+}
+
+#aside-social-media > nav > a{
+    margin: 10px;
+}
+
+.social-icon{
+    width: 30px !important;
+    height: 30px !important;
+}

@@ -1,0 +1,31 @@
+.card-deck{
+    cursor: pointer;
+}
+
+#main-portfolio{
+    padding-top: 2em;
+    padding-bottom: 2em;
+    clear: both;
+    width: 100%;
+    display: block;
+}
+
+.main-portfolio-content{
+    padding: 0 2.5em;
+}
+
+@media (min-width: 576px){
+    .card-deck {
+        display: block !important;
+    }
+}
+
+@media (min-width: 992px){
+    .card-deck {
+        display: flex !important;
+    }
+
+    .project-overview{
+        max-width: 50% !important;
+    }
+}

@@ -1,0 +1,11 @@
+#main-about{
+    padding-top: 2em;
+    padding-bottom: 2em;
+    clear: both;
+    width: 100%;
+    display: block;
+}
+
+.main-about-content{
+    padding: 0 2.5em;
+}

@@ -1,0 +1,51 @@
+{
+    "Nation Navigator": {
+        "ID": "professional-1",
+        "Title": "Nation Navigator",
+        "Details": {
+            "Company": "H.G. Smith & Associates",
+            "Date": "June 2019 - ongoing",
+            "Role": "Junior Developer (Remote Position)",
+            "Technologies Used": "( Django, PostgreSQL, AWS, GitLab )"
+        },
+        "Project Image Path": "/img/projects/NationNav.png",
+        "Project Description": [
+            "Nation Navigator is a web application used by the employees of H.G. Smith and Associates as a means of achieving everyday company tasks.",
+            " The application serves an assortment of sub-modules for the department sectors existing within the company."
+        ],
+        "My Involvement": [
+            "The application was created and used by employees in production since 2017 and has had multiple contributions from the development team members since then.",
+            " As it is mainly a remote-position with occasional visits to the main office located in Cochrane, Albeta, I work independently on the daily basis",
+            " and collaborate with the Lead IT & other developers through Microsoft Teams and TeamViewer.",
+            "\n\nResponsibilities include:",
+            "\n\t\u2022 Developing a prototype with core functionalities and features of sub-modules and new department sectors in accordance with the company's system requirements.",
+            "\n\t\u2022 Responding to client and employee feedback, using iterative design approach to produce the final product.",
+            "\n\t\u2022 Participate in a Test-Driven-Development approach for assigned tasks", 
+            "\n\t\u2022 Maintain and administrate the application server deployed in AWS", 
+            "\n\t\u2022 Bug fixing",
+            "\n\t\u2022 Delivering a mobile-friendly layout design for off-site and on-reserve employees and clients"
+        ]
+        
+    },
+
+    "WOPR": {
+        "ID": "professional-2",
+        "Title": "Wind Operational Performance Reporting (WOPR)",
+        "Details": {
+            "Company": "N/A (Student)",
+            "Client": "TransAlta Performance Engineering Team",
+            "Date": "September 2018 - April 2019",
+            "Role": "Software Engineering Student",
+            "Technologies Used": "( Django, MSSQL, D3.js, HandsOnTable.js, GitHub )"
+        },
+        "Project Image Path": "/img/projects/WOPR.png", 
+        "Project Description": [
+            "The WOPR was a web application design proposition to TransAlta's Performance Engineering Team as part of the University of Calgary's Engineering Capstone Design Program.",
+            " In hindsight, the app provided performance reporting of TransAlta's multiple wind turbines in one of their wind farms through interactive and real-time visualizations, and in-depth analysis of data and user input."
+        ],
+        "My Involvement": [
+            "To be continued..."
+        ]
+        
+    }
+}

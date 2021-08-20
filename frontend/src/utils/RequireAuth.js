@@ -9,7 +9,7 @@ export default function requireAuth(Component) {
       super(props);
       this.checkAuth();
     }
-
+    
     componentDidUpdate(prevProps, prevState) {
       this.checkAuth();
     }

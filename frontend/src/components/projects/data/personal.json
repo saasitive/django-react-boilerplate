@@ -1,0 +1,18 @@
+{
+    "Real Survival Horror": {
+        "ID": "personal-1",
+        "Title": "Real Survival Horror Game",
+        "Details": {
+            "Date Started": "Dec 2019??",
+            "Contributors": "Me and a buddy of mine in University",
+            "Technologies Used": "Processing 2"
+        },
+        "Project Image Path": "/img/projects/RealSurvivalHorror.png",
+        "Project Description": [
+            "This quadruple A game was created for a project in the introduction to coding class ENG 233."
+        ],
+        "My Involvement": [
+            "Came up with the idea and the resources used like the sound effects and the images."
+        ]
+    }
+}

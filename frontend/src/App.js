@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import Root from "./Root";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import Home from "./components/Home";
+import SidebarComponent from "./components/sidebar/Sidebar";
 import Signup from "./components/account/Signup";
 import Login from "./components/login/Login";
 import ResendActivation from "./components/account/ResendActivation";
@@ -15,6 +15,7 @@ import Dashboard from "./components/dashboard/Dashboard";
 import requireAuth from "./utils/RequireAuth";
 
 import axios from "axios";
+
 
 if (window.location.origin === "http://localhost:3000") {
   axios.defaults.baseURL = "http://127.0.0.1:8000";
@@ -32,7 +33,7 @@ class App extends Component {
             <Route path="/signup" component={Signup} />
             <Route path="/login" component={Login} />
             <Route path="/dashboard" component={requireAuth(Dashboard)} />
-            <Route exact path="/" component={Home} />
+            <Route exact path="/" component={SidebarComponent} />
             <Route path="/resend_activation" component={ResendActivation} />
             <Route path="/activate/:uid/:token" component={ActivateAccount} />
             <Route path="/send_reset_password/" component={ResetPassword} />

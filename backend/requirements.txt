@@ -1,6 +1,11 @@
 django==3.1.2
+psycopg2>=2.8.6,<2.9.1
 djoser==2.0.5
 djangorestframework==3.11.2 # https://github.com/sunscrapers/djoser/issues/541
 markdown==3.3 
 django-filter==2.4.0
 django_cors_headers==3.5.0
+Jinja2==3.0.1
+django-extensions==3.1.3
+django-debug-toolbar==3.2.1
+Werkzeug==2.0.1

@@ -192,6 +192,3 @@ USE_TZ = True
 MEDIA_URL = '/media/'
 STATIC_URL = '/django_static/' 
 STATIC_ROOT = BASE_DIR / 'django_static'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static')
-]

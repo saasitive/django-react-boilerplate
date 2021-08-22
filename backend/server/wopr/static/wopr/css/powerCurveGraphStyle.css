@@ -1,0 +1,34 @@
+
+
+#powerCurve  .xaxis {
+    font-size: 13px;
+}
+
+#powerCurve  .xaxis path,
+#powerCurve  .xaxis line {
+    stroke:black;
+    fill: none;
+}
+
+#powerCurve  .yaxis {
+    font-size: 13px;
+}
+
+#powerCurve .yaxis path,
+#powerCurve  .yaxis line {
+    stroke:black;
+    fill: none;
+}
+
+#powerCurve  .grid .tick {
+    stroke: #c0c0c0;
+    stroke-opacity: 1.0;
+    shape-rendering: crispEdges;
+}
+#powerCurve  .grid path {
+    stroke-width: 0;
+}
+
+#powerCurve  .label {
+    font-size: 10px;
+}

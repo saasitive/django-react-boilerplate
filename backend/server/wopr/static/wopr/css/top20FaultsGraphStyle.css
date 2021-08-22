@@ -1,0 +1,40 @@
+#top20FaultsGraph .barD {
+    fill: #5f89ad;
+    opacity: 0.7;
+}
+
+#top20FaultsGraph  .barT {
+    fill: #9debd7;
+    opacity: 0.7;
+}
+
+#top20FaultsGraph  .axis {
+    font-size: 13px;
+}
+
+#top20FaultsGraph  .axis path,
+#top20FaultsGraph  .axis line {
+    stroke:black;
+    fill: none;
+}
+
+#top20FaultsGraph  .axisTop {
+    fill: black;
+}
+#top20FaultsGraph  .grid .tick {
+    stroke: #c0c0c0;
+    stroke-opacity: 1.0;
+    shape-rendering: crispEdges;
+}
+#top20FaultsGraph  .grid path {
+    stroke-width: 0;
+}
+
+#top20FaultsGraph  .label {
+    font-size: 10px;
+}
+#top20FaultsGraph  .legend rect {
+    fill: pink;
+    stroke: black;
+    opacity: 0.8;
+}

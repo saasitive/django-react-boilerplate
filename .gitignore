@@ -133,3 +133,4 @@ dmypy.json
 ssh.txt
 backend/server/manage2.py
 docker/db/init.sql
+backend/server/django_static/

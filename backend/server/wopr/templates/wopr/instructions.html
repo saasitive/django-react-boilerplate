@@ -1,0 +1,97 @@
+{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Instructions</li>
+      </ol>
+
+      <!-- Page Content -->
+      <h1>How to Make Edits to the Data</h1>
+      <hr />
+      <p>1. Click the "Select a Site" button on the left</p>
+      <p>2. Choose the site you'd like to view from the dropdown menu</p>
+      <p>3. Filter the entries in the table by time, or other parameters</p>
+      <img src='{% static "wopr/instructions/selectingtime.png" %}'></img>
+      <p>4.1 From the bar chart, you can select the segment you'd like to edit, or make changes to the table directly</p>
+      <p>4.2 You can also make changes directly to the table from the "Spreadsheet" tab</p>
+      <img src='{% static "wopr/instructions/tablechanges.png" %}'></img>     
+      <p>5. Save your changes after you're done by pressing the "Save Changes" button in the rop right corner</p>
+      <img src='{% static "wopr/instructions/savingtablechanges.png" %}'></img>
+	  
+	    <h1>Viewing Reports</h1>
+      <hr />
+      <p>1. Click on the reports tab on the left, and then click the desired report</p>
+      <img src='{% static "wopr/instructions/selectingreport.png" %}'></img>
+      <p>2. Enter the site, turbine numbers and/or date range and submit</p>
+      <img src='{% static "wopr/instructions/viewingreport.png" %}'></img>
+    
+      <h1>Exporting Data</h1>
+      <hr />
+      <p>1. Select a site by clicking "Select Site" on the left</p>
+      <p>2. Choose the site you're interested in from the dropdown menu</p>
+      <p>3. Filter the entries in the table by time, or other parameters</p>
+      <p>4. From the edits dashboard, click export to download the selected data as a .csv file</p>
+
+      <h1>Importing an IESO File for Editing</h1>
+      <hr />
+      <p>1. Select "IESO Upload" on the left</p>
+      <p>2. Choose the file you want to edit by clicking "Choose File" and then "Upload"</p>
+      <p>3. Accept or Reject the scripts produced by WOPR based on the IESO File</p>
+      
+
+      <script>
+        var data = [];
+        console.log('{{request.session.ts_start_global}}');
+        // Check indexedDB for data
+        const dbName = "data_storage";
+        var request = window.indexedDB.open(dbName, 1),
+            db, transaction, store, index;
+        // Define handlers
+        request.onerror = function(event) {
+          // Handle errors.
+          console.log("Request Error: " + event );
+        };
+        request.onupgradeneeded = function(event) {
+          db = request.result,
+              store = db.createObjectStore("DataStore", { keyPath: "turbine"}),
+              index = store.createIndex('data', 'data', {unique: false})
+        };
+        request.onsuccess = function(event){
+          console.log('Opening the db successful.')
+          db = request.result;
+          transaction = db.transaction('DataStore', "readwrite");
+          store = transaction.objectStore('DataStore');
+          index = store.index('data');
+
+          for(let i = 0; i < 47; i++){
+            let result = store.get(i);
+            result.onsuccess = function(event){
+              if(event.srcElement.result){
+                data.push(event.srcElement.result);
+              }
+            }
+            request.onerror = function(event){
+              console.log(event);
+            }
+          }
+
+          transaction.oncomplete = (function(event){
+            // console.log('Closing the db.');
+            db.close();
+            console.log(data);
+          })
+        }
+        
+      </script>
+	  
+
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

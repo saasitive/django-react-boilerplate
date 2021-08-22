@@ -1,0 +1,200 @@
+{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      {% if request.session.siteid %}
+      <li class="breadcrumb-item">Site {{request.session.siteid}}</li>
+      {% endif %}
+      <li class="breadcrumb-item active">Edits</li>
+    </ol>
+
+    <!-- Page Content -->
+    <h1>Edits Table</h1>
+    <hr />
+  
+
+    {% if request.session.siteid %}
+      <div>
+        Select a User Name to filter the search:
+        <input id="username" name="search" type="text" class="query-search" placeholder="Enter a username...">
+        <input onclick="filterByUserName()" type="button" class="btn btn-primary" value = "Filter"/>
+      </div>
+      <i>Example: knoske, dseely, llessard </i>
+
+      <hr>
+
+      {% if json %}
+
+      <!-- List of hooks-->
+      <div id="hooksList"></div>
+      <!-- Edits Table -->
+      <div id="editstable"></div>
+
+      <hr>
+
+      <!-- Displays the Console, the commit button, and the event callbacks-->
+      <div class="panel panel-primary" id="events-table">
+      
+      <div class="panel-body" id="events">
+      
+      
+      <script type='text/javascript' name='editsScript'>
+
+        // Array that will keep track of each changes in the data
+        var changesArray = new Array();
+
+        // Variable that will represent the table
+        var handsontable, objectArray;
+        
+        // Counter for the comments
+        var counter = 1;
+
+        var start = new Date().getTime(), timer;
+
+        $(document).ready(function(){
+            // Parse the JSON response
+            var json = JSON.parse("{{json | escapejs}}");
+
+            // Define the array of objects with the length of keys from the json response
+            objectArray = new Array(Object.keys(json).length);
+                
+            // Add in the primary key value to the fields of the JSON since it does not read it as a field
+            for(const i in json){
+              var siteConfigObj = {
+                editid: json[i].pk
+              };
+              // Merge the two objects
+              siteConfigObj = {...siteConfigObj, ...json[i].fields};
+              // Store the merged object to an array for the Handsontable to read
+              objectArray[i] = siteConfigObj;
+            }
+
+            // Tutorial for writing a callback at https://handsontable.com/docs/6.2.0/tutorial-using-callbacks.html
+            config = {
+              data: objectArray,
+              colHeaders:  ['EditID', 'ts_edit', 'siteID', 'id','period_from','period_to','fieldID','ts_EditStart',
+              'ts_EditEnd', 'username','comment', 'newVal'],
+              columns :
+                      [{data: 'editid'},{data: 'ts_edit'},{data: 'siteid'} ,{data: 'id'} ,{data: 'period_from'}, {data: 'period_to'},
+                         {data: 'fieldid'}, {data: 'ts_editstart'}, {data: 'ts_editend'}, {data: 'username'}
+                         ,{data: 'comment'}, {data: 'newval'}
+                      ],
+              minSpareRows: 1,
+              manualColumnResize: true,
+              manualRowResize: true,
+              height: 400
+              
+            }
+
+            var i = 0;
+
+            $hooksList = $('#hooksList');
+            var hooks = Handsontable.hooks.getRegistered();
+            
+            
+            var events = document.getElementById("events");
+
+            handsontable = new Handsontable(document.getElementById('editstable'), config);
+
+            
+        });
+
+        /* Function called to filter the data by the username */
+        function filterByUserName(){
+          var username_val = $("#username").val();
+  
+          $.ajax({
+            url: "{% url 'filter-edits' %}",
+            data:{
+              "username": username_val,
+              "siteid": "{{request.session.siteid}}"
+  
+            },
+            type: "GET",
+            success: function (dataFromTemplate) {
+              
+              //Comment out to see the response from the AJAX call
+              //console.log(dataFromTemplate);
+  
+              // Parse the JSON response
+              var json = JSON.parse(dataFromTemplate);
+              // Define the array of objects with the length of keys from the json response
+              objectArray = new Array(Object.keys(json).length);
+  
+              // Add in the primary key value to the fields of the JSON since it does not read it as a field
+              for(const i in json){
+                var siteConfigObj = {
+                  editid: json[i].pk
+                };
+                // Merge the two objects
+                siteConfigObj = {...siteConfigObj, ...json[i].fields};
+                // Store the merged object to an array for the Handsontable to read
+                objectArray[i] = siteConfigObj;
+              }
+
+              // Update the data of the table and the callback since the objectArray changed              
+              handsontable.updateSettings({
+                data: objectArray
+              })
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+          });
+        }
+
+      </script>
+      {% endif %}
+    {% else %}
+    <div>
+      <p>Select a site to view its edits data :</p>
+      <input id="siteid" name="search" type="text" class="query-search" placeholder="Enter a siteID...(1432)">
+      <input onclick="getSites()" type="button" class="btn btn-primary" value = "Search"/>
+      <hr />
+      <h2 id="resultsheader"></h2>
+      <ul class="list-group">
+      <div id="siteResults"></div>
+      </ul>
+  </div>
+
+    <script>
+        function getSites(){
+
+          $('#resultsheader').empty();
+          $('#siteResults').empty();
+  
+          $.ajax({
+            url: "{% url 'ajaxT_sites' %}",
+            data: {"siteid": $("#siteid").val()},
+            type: "GET",
+            success: function (dataFromTemplate) {
+
+                if(dataFromTemplate.status){
+                   
+                    var path =  '<a href=' + "\"" + "editsTable/" + dataFromTemplate.siteid.toString() + "\""  +">"
+                    $('#resultsheader').append("Search Results");
+                    $('#siteResults').append('<li class="list-group-item">' + path + "Site No. " + dataFromTemplate.siteid + '</li>');
+                }
+                else
+                    alert(dataFromTemplate.message);
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+          });
+        }
+    </script>
+    {% endif %}
+  </div>
+  <!-- /.container-fluid -->
+</div>
+<!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

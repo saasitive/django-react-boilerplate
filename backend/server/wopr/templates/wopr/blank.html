@@ -1,0 +1,77 @@
+{% extends 'wopr/layout.html' %} {%block content %}
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Blank Page</li>
+      </ol>
+
+      <!-- Page Content -->
+      <h1>Blank Page</h1>
+      <hr />
+      <p>This is a great starting point for new custom pages.</p>
+
+      <script>
+
+        EmptyWindowClass = function (container, state){
+
+          // Define a private variable for container and state used by GoldenLayout
+          this._container = container; 
+          this._state = state;
+
+          // Title of the GoldenLayout container
+          this._container.setTitle(this._state.title);
+  
+          // Bind the function drawChart to an event 'open' of the container
+          this._container.on( 'open', this._myFunction.bind( this ));
+        };
+
+        EmptyWindowClass.prototype._myFunction = function() {
+
+          // Select the parent div of the container
+          this._lm_content = d3.select(this._container.getElement()[0]);
+
+          this._myDiv = this._lm_content.append('div').attr("class", "watever");
+
+          // Here is where you add stuff
+
+          this._myDiv.html('Bruuuuuuuuuuuuhhhhhhhhhh');
+
+        };
+
+        var goldenLayoutConfig = {
+          content: [{
+              type: 'row',
+              content:[ 
+              {
+                  type: 'component',
+                  componentName: 'Window',
+                  componentState: {
+                    title: 'Empty Window'
+                  }
+              },            
+              ]
+          }]
+        };
+
+        // Create the layout and assign to the inner div with id innerDiv 
+        var myLayout = new window.GoldenLayout( goldenLayoutConfig, $('.container-fluid') );
+
+        // Add the two Components
+        myLayout.registerComponent('Window', EmptyWindowClass);
+
+        myLayout.init();
+      </script>
+
+
+
+
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

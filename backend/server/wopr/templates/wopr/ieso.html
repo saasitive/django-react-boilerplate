@@ -1,0 +1,90 @@
+{% extends 'wopr/layout.html' %} {%block content %}
+<div id="content-wrapper">
+    <div class="container-fluid">
+        <!-- Breadcrumbs -->
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+            <li class="breadcrumb-item active">IESO File Upload</li>
+        </ol>
+
+        <!-- Page Content -->
+        <h1>IESO file upload</h1>
+        <hr />
+        <form action="{% url 'iesoUpload' %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <br>
+            {% if form.errors %}
+            {{form.errors}}
+            {% endif %}
+            <br>
+            Please select an IESO file for upload: {{ form.IESO_file }}
+            <br><br>
+            {{ form.useMidnight }}
+            if no release is found for a mandatory dispatch, use midnight of the following day as the end date
+            <br><br>
+            <input class='btn-success' type="submit" value="Upload" name="file" id="file">
+        </form>
+        {% if dialog %}
+        <br>
+            <h4>Selected file: {{file}}</h4>
+            <br><br>
+            <b>No end found for mandatory dispatch at {{dispatch}}. <br>Use {{dialog}}?</b> 
+            <br><br>
+            <ul style="list-style-type: none; text-align: left">
+                <li style="display: inline-block">
+                    <form action="{% url 'iesoUpload' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="answered" value="{{file}}">
+                        <input class='btn-success' style="margin: 10px" type="submit" value="Yes">
+                    </form>
+                </li>
+                <li style="display: inline-block">
+                    <form action="{% url 'iesoUpload' %}" method="GET">
+                        <input class='btn-success' style="margin: 10px" type="submit" value="No">
+                    </form>
+                </li>
+            </ul>
+        {% elif invalid %}
+            <br>
+            <h4>The selected file: <br>{{invalid}}<br>
+            {{result}} </h4>
+        {% elif valid %}
+            <br>
+            <h4>Selected file: {{valid}}</h4>
+            <br><br>
+            <ul>
+                {% for item in result %}
+                <li>dbo.sp_UpdateStateSystemWhereCTH {{item}}</li>
+                {% endfor %}
+            </ul>
+            {% if errors %}
+                <br><br>
+                <b>The following errors occurred:</b>
+                <ul>
+                    {% for item in errors %}
+                    <li>{{item}}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <br><br>
+            <ul style="list-style-type: none; text-align: left">
+                <li style="display: inline-block">
+                    <form action="{% url 'iesoUpload' %}" method="POST">
+                        {% csrf_token %}
+                        <input type="hidden" name="accepted_scripts" id="accepted_scripts" value="{{result}}">
+                        <input class='btn-success' style="margin: 10px" type="submit" value="Accept">
+                    </form>
+                </li>
+                <li style="display: inline-block">
+                    <form action="{% url 'iesoUpload' %}" method="GET">
+                        <input class='btn-success' style="margin: 10px" type="submit" value="Reject">
+                    </form>
+                </li>
+            </ul>
+            
+        {% endif %}
+    </div>
+    <!-- /.container-fluid -->
+</div>
+<!-- /.content-wrapper -->
+{% endblock %}

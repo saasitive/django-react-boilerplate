@@ -1,0 +1,849 @@
+{% extends 'wopr/layout.html' %} {% load static %} {% load widget_tweaks %} {%block content %}
+
+<!-- Golden Layout Styling Sheet-->
+<link href="{% static 'wopr/goldenlayout/goldenlayout-base.css' %}" rel="stylesheet" media="screen">  
+<link href="{% static 'wopr/goldenlayout/goldenlayout-dark-theme.css' %}" rel="stylesheet" media="screen">  
+
+<!-- HandsonTablePro styling sheet-->
+<link href="{% static 'wopr/handsontable/handsontable.full.css' %}" rel="stylesheet" media="screen">  
+
+<!-- Handsontable javascript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handsontable/7.0.0/handsontable.full.min.js"></script>
+
+<!-- GoldenLayout javascript-->
+<script src="{% static 'wopr/goldenlayout/goldenlayout.min.js' %}"></script>
+
+<!-- D3 -->
+<script src="{% static 'wopr/d3/d3.js' %}"></script>
+<script src="{% static 'wopr/d3/d3.min.js' %}"></script>
+
+<!-- LoDash -->
+<script src="{% static 'wopr/lodash/lodash.min.js' %}"></script>
+
+<!-- Moment -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.23/moment-timezone-with-data.js"></script>
+
+<!-- Select site map (CSS then JS files)-->
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.4.0/dist/leaflet.css"
+integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+crossorigin=""/>
+
+<script src="https://unpkg.com/leaflet@1.4.0/dist/leaflet.js"
+integrity="sha512-QVftwZFqvtRNi0ZyCtsznlKSWOStnDORoefr1enyq5mVL4tmKB3S/EnC3rRJcxCPavG10IcrVGSmPh6Qw5lwrg=="
+crossorigin="">
+</script>   
+
+<!-- Data Structures and Functions used by GoldenLayout-->
+<script src="{% static 'wopr/dashboard/data_structures.js' %}"></script>
+<script src="{% static 'wopr/dashboard/functions.js' %}"></script>
+
+<!-- CSS for this page-->
+<link rel="stylesheet" href="{% static 'wopr/dashboard/dashboard.css' %}" >
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Select a Site</a></li>
+      {% if request.session.siteid %}
+      <li  class="breadcrumb-item"><a href="dashboard/{{request.session.siteid}}/?reselect=true">Site {{request.session.siteid}}</a></li>
+      {% endif %}
+      <li class="breadcrumb-item active">Edits Allocation</li>
+    </ol>
+    
+
+    <!-- Page Content -->
+    <div>
+        <h1 style="display: inline;">Edits Allocation</h1> 
+        {% if request.session.django_timezone %}
+            <div class="dropdown" style="display: inline; position: absolute; right: 2.5%;" >
+                    <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Change Timezone
+                    <span class="caret"></span></button>
+                    <ul class="dropdown-menu" style="text-align: center;">
+                    <li><button class="btn-tz" onclick="changeTimezone(Intl.DateTimeFormat().resolvedOptions().timeZone, '{{ csrf_token }}')">Local Time Zone</button></li>
+                    <li><button class="btn-tz" onclick="changeTimezone('UTC', '{{ csrf_token }}')" href="#">UTC</button></li>
+                    </ul>
+                    <p id='timezone-display'><b>All times are on {{request.session.django_timezone}}</b>.</p>   
+
+            </div>
+        {% endif %}
+    </div>
+           
+    <hr/>
+    
+    <!-- If the user selected a siteID -->
+    {% if request.session.siteid %}
+
+      <!-- If the user has selected a date range and a turbine range-->
+           
+      {% if ts_start_global and ts_end_global and turbine_range %}
+        
+        <div id="slicer_div" style="display: flex;">
+          <form>
+              {% csrf_token %}
+              {{filterDashboardForm.as_table}}
+              <input class='btn-success' id='filter_dashboard_btn' type="submit" value="Filter">
+
+              <button id="exportCSVButton" class="btn-secondary" style='margin-left: 100px;'>Export to CSV</button>
+              <button id="saveChangesButton" class="btn-info" style='margin-left: 20px;'>Save Changes</button>
+          </form>
+        </div>
+
+        <script>
+
+          /***********************************************
+                    Global Event Listeners (Buttons)
+          ***********************************************/
+
+          // Add event listeners to the buttons to call their corresponding data slicing functions and exports.
+          var filterDashboardButton = document.getElementById('filter_dashboard_btn').addEventListener("click", function(event){  
+            if(sceneNum == 1){
+              event.preventDefault();
+              return
+            }
+            let ts_start = $("#slicer_div>form>input:text")[0].value;
+            let ts_end = $("#slicer_div>form>input:text")[1].value;
+
+            let turbine_start = parseInt($("#slicer_div>form>select")[0].value);
+            let turbine_end = parseInt($("#slicer_div>form>select")[1].value);
+
+            if(ts_start && ts_end && turbine_start && turbine_end){ // If they are not empty
+
+              let ts_start_moment = formatDate(ts_start);
+              let ts_end_moment = formatDate(ts_end);
+
+              event.preventDefault();
+
+
+              if(ts_end_moment < ts_start_moment){
+                alert('Please make sure the end date/time is after the start date/time');
+                event.preventDefault();
+                return
+              }
+
+              if(turbine_start > turbine_end){
+                alert('Please make sure the turbine ranges make sense.');
+                event.preventDefault();
+                return
+              }
+
+              let start_global = moment.utc('{{ts_start_global}}').tz(timezone);
+              let end_global = moment.utc('{{ts_end_global}}').tz(timezone);
+
+              if(ts_start_moment >= start_global && ts_end_moment <= end_global){ // do not need to query the server since the data is already pulled
+
+                d3.select('.container-fluid').attr('style', 'display: none;');            
+                d3.select('.golden-layout-wrapper').attr('style', 'display: none;');            
+                element = d3.select('#content-wrapper').append('div').attr('class', 'loader');
+                loading_msg = d3.select('#content-wrapper').append('p').attr('class', 'loading-message').text('Slicing the data...');
+
+                data = filterDataByRange(ts_start_moment, ts_end_moment, turbine_start, turbine_end, unmodifiedData);
+
+                ts_start_global = ts_start_moment.toISOString();
+                ts_end_global = ts_end_moment.toISOString();
+
+                // Apply changes to the data if there are changes stored in session
+                applyChanges(changesArray, data);
+                
+                if(hotComponent && !hotComponent.table.isDestroyed){
+                  let tableSchema = generateTableData(data);
+                
+                  // Define the global variables tableData, columnsHeader, columnsMeta, and chartData for components
+                  tableData = tableSchema['tableData'];
+                  columnsHeader = tableSchema['columnsHeader'];
+                  columnsMeta = tableSchema['columnsMeta'];
+
+                  hotComponent._tableData = tableData;
+                  hotComponent.table.updateSettings({
+                      data: hotComponent._tableData,
+                      colHeaders: columnsHeader,
+                      columns: columnsMeta,
+                  });
+                }
+
+                chartData = generateChartData(data);
+
+                // Remove the loader class, loading message, and display the hidden goldenlayout
+                element.remove();
+                loading_msg.remove();
+                d3.select('.container-fluid').attr('style', 'display: block;');
+                d3.select('.golden-layout-wrapper').attr('style', 'display: block;'); 
+
+                if(sceneNum != 1 && sceneNum != 2){
+                  // Render the GoldenLayout
+                  renderLayout(sceneNum);
+                }
+
+                event.preventDefault();
+                return
+              
+              }
+
+              console.log(ts_start_moment, ts_end_moment, moment.utc('{{ts_start_global}}').tz(timezone),  moment.utc('{{ts_end_global}}').tz(timezone));
+              alert('Date range is outside of the queried data. Try a date range inside the queried data or search another date range.');
+              event.preventDefault();
+            }
+
+          });
+         
+          var exportCSVButton = document.getElementById('exportCSVButton').addEventListener("click", function(event){
+              event.preventDefault();  
+              exportToCSV(generateTableData(unmodifiedData)['tableData'], '{{request.session.siteid}}');
+          });
+
+          var saveChangesButton = document.getElementById('saveChangesButton').addEventListener("click", function(event){
+            event.preventDefault();
+            if(changesArray.length != 0 && !changesSaved){
+                if (confirm('Are you sure you want to save these changes?')) {
+                    // Save it!
+                    changesSaved = true;
+                    $.ajax({
+                        url: "{% url 'store-changes' %}",
+                        data:{
+                            changesArray: JSON.stringify(changesArray),
+                            csrfmiddlewaretoken: '{{ csrf_token }}',
+                        },
+                        type: "POST",
+                        
+                        success: function (dataFromTemplate) {
+                            alert(dataFromTemplate.message);
+                        },
+                        error: function(error_data){
+                            console.log("error");
+                            console.log(error_data);
+                        }
+                      }); 
+                    
+                } else {
+                    // Do nothing!
+                } 
+            }
+            else{
+                alert('There are no changes to be saved.');
+            }
+              
+          });
+
+
+        </script>
+        
+
+        <hr>
+
+        <!-- Modal -->
+        <div class="modal fade" id="editModal" role="dialog">
+          <div class="modal-dialog">
+          
+            <!-- Modal content-->
+            <div class="modal-content">
+              <div class="modal-header" style="display: block;">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Modal Header</h4>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group"></div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" id= "modal-button" data-dismiss="modal">Edit</button>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+      </div>
+
+        <!-- GoldenLayout Container and Menu -->
+        <div class='golden-layout-wrapper'>
+            <div id='toggleMenu' onclick="hideMenu()">
+                <p id="text" style="
+                padding-top: 350px;
+                font-size: 20px;
+            "><b>&lt;</b></p>
+            </div>
+            <ul id="menuContainer"></ul>
+            <div class='golden-layout-container'></div>
+        </div>
+
+        <script>   
+          
+          /***********************************************
+                          Global Variables
+          ***********************************************/
+          // Data handlers
+          var data = [], changesArray = [], rawDataList,  unmodifiedData = [];
+
+          // GoldenLayout, D3Chart, HandsonTable variables
+          var chartComponent, hotComponent,
+              chartData, tableData, columnsHeader, columnsMeta,
+              stroke_width = 1, tooltip, goldenLayout, sceneNum = 0;
+
+          // SiteMap variables
+          var site_locations = JSON.parse("{{site_locations|escapejs}}"),
+              turbine_locations = JSON.parse("{{turbine_locations|escapejs}}"),
+              turbine_markers_global = [];
+
+          // General variables
+          var timezone = '{{request.session.django_timezone}}',
+              stateColorScheme = JSON.parse("{{stateColorScheme|escapejs}}"),
+              systemColorScheme = JSON.parse("{{systemColorScheme|escapejs}}"),
+              ts_start_global = '{{ts_start_global}}',
+              ts_end_global = '{{ts_end_global}}',
+              turbine_range = '{{turbine_range}}',
+              changesSaved = true;
+
+              moment().format(); // format the module moment() used to handle timezones
+
+
+          // Set up a function call when the user leaves the page.
+          window.onbeforeunload = function() {
+
+            // If indexedDB is not available for the browser, use Django sessions instead to store data
+            if (!('indexedDB' in window)) {
+
+              let message = 'This browser doesn\'t support IndexedDB.\nSaved using sessions.';
+
+              // Synchronous call to the server to save components in user session
+              $.ajax({
+                url: "{% url 'store-session-data' %}",
+                data:{
+                    ts_start_global: '{{ts_start_global}}',
+                    ts_end_global: '{{ts_end_global}}',
+                    turbine_range: '{{turbine_range}}',
+
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                type: "POST",
+                async: false,
+                
+                success: function (dataFromTemplate) {
+                    message += ('\n Server returned: ' +  dataFromTemplate.message);
+                    console.log(message);
+
+                    /*
+                    var start = Date.now();
+                    console.log('Exiting in 5 seconds');
+                    while (Date.now() < start + 5000) {}
+                    */
+                },
+                error: function(error_data){
+                    console.log("error");
+                    console.log(error_data);
+                }
+              });
+      
+            }
+            // Else, use indexedDB and a synchronous ajax call to store data in the indexedDB web storage
+            // and user session (only ts_start_global, ts_end_global, and turbine_range)
+            else {
+
+              $.ajax({
+                url: "{% url 'store-session-data' %}",
+                data:{
+                  ts_start_global: '{{ts_start_global}}',
+                  ts_end_global: '{{ts_end_global}}',
+                  turbine_range: '{{turbine_range}}',
+
+                  csrfmiddlewaretoken: '{{ csrf_token }}',
+                },
+                type: "POST",
+                async: false,
+                
+                success: function (dataFromTemplate) {
+                  console.log(dataFromTemplate.message); // display server message
+                },
+                error: function(error_data){
+                  console.log("error");
+                  console.log(error_data);
+                }
+                });     
+            }  
+
+            // Alert the user that there are changes to be saved.
+            if(!changesSaved)
+                return true; // As of 2017, modern browsers removed displaying custom messages, read more here: https://developer.mozilla.org/en-US/docs/Web/API/WindowEventHandlers/onbeforeunload#Browser_compatibility
+          };
+            
+
+
+          $(window).resize(function () {
+            //goldenLayout.updateSize($(window).width(), $(window).height());
+            let config = goldenLayout.toConfig()
+            goldenLayout.destroy()
+            goldenLayout.config = config
+            goldenLayout.init()
+            if(tooltip){
+              tooltip.style('display', 'none');
+            }
+          });
+
+          // When the web page has been loaded, this function executes...
+          $(document).ready(function (){
+
+            // At page load, use D3 to hide the screen, add the loader class, and add the loading message
+            d3.select('.container-fluid').attr('style', 'display: none;');            
+            d3.select('.golden-layout-wrapper').attr('style', 'display: none;');            
+            let element = d3.select('#content-wrapper').append('div').attr('class', 'loader');
+            let loading_msg = d3.select('#content-wrapper').append('p').attr('class', 'loading-message').text('Fetching the data...');
+             
+            // Check indexedDB for data first. Documentation can be found here: https://developer.mozilla.org/en-US/docs/Web/API/IndexedDB_API/Using_IndexedDB
+            const dbName = "data_storage";
+
+            // Define the indexedDB variables and open it
+            let request = window.indexedDB.open(dbName, 1),
+                db, transaction, store, index;
+
+            // Define handlers
+            request.onerror = function(event) {
+              // Handle errors.
+              console.log("Request Error: " + event );
+            };
+
+            // If the version of indexedDB needs to be upgraded (also runs when the database is being created for the first time)
+            request.onupgradeneeded = function(event) {
+              loading_msg.text('Fetching data from the server...');              
+              let db = request.result,
+                  store = db.createObjectStore("DataStore", { keyPath: "turbine"}),
+                  index = store.createIndex('data', 'data', {unique: false})
+            };
+
+            // indexedDB opened successfully.
+            request.onsuccess = function(event){
+              db = request.result;
+              transaction = db.transaction('DataStore', "readwrite");
+              store = transaction.objectStore('DataStore');
+              index = store.index('data');
+
+
+              db.onerror = (function(event){
+                console.log("Database error: ", event);
+              });
+
+              // Iterate through the turbine data stored in the indexedDB and store it in the data array
+              for(let i = parseInt(turbine_range.split('-')[0]); i <= parseInt(turbine_range.split('-')[1]); i++){
+                let result = store.get(i);
+                result.onsuccess = function(event){
+                  if(event.srcElement.result){
+                    loading_msg.text('Fetching cached data...');
+                    data.push(event.srcElement.result); // store in data array
+                  }
+                }
+              }
+              // Close the indexedDB connection once transaction is finished.
+              transaction.oncomplete = (function(event){
+
+                // console.log('Closing the db.');
+                db.close();
+
+                console.log(data.length);
+
+                // Check if there were no data recovered from indexedDB
+                if (data.length == 0) {
+
+                    // Asynchronous data fetch call to the server
+                    $.ajax({
+                      url: "{% url 'ajax_TenMinuteData' %}",
+                      data:{
+                          "ts_start_from": '{{ts_start_global}}',
+                          "ts_until": '{{ts_end_global}}',
+                          "siteid": '{{request.session.siteid}}',
+                          "tz": "{{request.session.django_timezone}}",
+                          "turbine_range": '{{turbine_range}}'
+                      },
+                      type: "GET",
+                      
+                      // On success
+                      success: function (dataFromTemplate) {
+
+                        loading_msg.text('Processing response from the server...');
+                  
+                        if(dataFromTemplate['status']){ // If the status is 1, it means data was found for that time period in that turbine range
+                          
+                          // Parse the data received from the server in a form of JSON format
+                          rawDataList = JSON.parse(dataFromTemplate['rawDataList']);
+                          // Structure the data array to the desired format
+                          data = processDataArray(rawDataList);
+
+                          unmodifiedData = _.cloneDeep(data);
+
+                          // Saves the data array in IndexedDB for caching later
+                          saveData(unmodifiedData).then(function(result){
+                            console.log(result);
+                            let message = 'Data is saved in IndexedDB.'  
+                            console.log(message);
+                          });   
+                          
+                          // Apply changes to the data if there are changes stored in session
+                          if('{{request.session.changesArray}}'){
+                            changesArray = JSON.parse('{{request.session.changesArray | escapejs }}')
+                            if(!changesArray || !changesArray.length > 0)
+                              changesArray = [];
+                            applyChanges(changesArray, data);
+                          }
+                          
+                          let tableSchema = generateTableData(data);
+                          
+                          // Define the global variables tableData, columnsHeader, columnsMeta, and chartData for components
+                          tableData = tableSchema['tableData'];
+                          columnsHeader = tableSchema['columnsHeader'];
+                          columnsMeta = tableSchema['columnsMeta'];
+
+                          chartData = generateChartData(data);
+
+                          // Remove the loader class, loading message, and display the hidden goldenlayout
+                          element.remove();
+                          loading_msg.remove();
+                          d3.select('.container-fluid').attr('style', 'display: block;');
+                          d3.select('.golden-layout-wrapper').attr('style', 'display: block;'); 
+        
+                          // Render the GoldenLayout
+                          renderLayout(sceneNum);
+                          
+                        }
+                        else{ // Else, the server could not find data for that time period for specific turbines
+
+                          // Remove the loader class, loading message, and display the hidden goldenlayout
+                          element.remove();
+                          loading_msg.remove();
+                          d3.select('.container-fluid').attr('style', 'display: block;');
+                          d3.select('.golden-layout-wrapper').attr('style', 'display: block;'); 
+                
+                          alert('Server returned: ' + dataFromTemplate['message']);
+                          return null;
+                        }
+                        
+                      }   
+                    });
+                }
+                else{ // There was data stored in IndexedDB that was previously fetched from the server  
+                  
+                  loading_msg.text('Generating components, processing data, and applying changes...')                  
+                  console.log('Indexed DB worked!');
+
+                  // Add the timestamps for the user's current timezone
+                  data.forEach(function(turbine){
+                    turbine['data'].forEach(function(t){
+                      t.ts_start = moment.utc(t.ts_start_UTC).tz(timezone);
+                      t.ts_end = moment.utc(t.ts_end_UTC).tz(timezone);
+                    });
+                  });
+
+                  unmodifiedData = _.cloneDeep(data);
+
+                  // Apply changes to the data if there are changes stored in session
+                  if('{{request.session.changesArray}}'){
+                    changesArray = JSON.parse('{{request.session.changesArray | escapejs }}')
+                    if(!changesArray || !changesArray.length > 0)
+                      changesArray = [];
+                    applyChanges(changesArray, data);
+                  }
+
+
+                  // Define the global variables tableData, columnsHeader, columnsMeta, and chartData for components
+                  let tableSchema = generateTableData(data);
+            
+                  tableData = tableSchema['tableData'];
+                  columnsHeader = tableSchema['columnsHeader'];
+                  columnsMeta = tableSchema['columnsMeta'];
+
+                  chartData = generateChartData(data);
+
+                  // Remove the loader class, loading message, and display the hidden goldenlayout
+                  element.remove();
+                  loading_msg.remove();
+                  d3.select('.container-fluid').attr('style', 'display: block;');
+                  d3.select('.golden-layout-wrapper').attr('style', 'display: block;');
+
+                  // Render the golden layout
+                  renderLayout(sceneNum);
+                }
+              });
+            }
+          });
+          
+          /***********************************************        
+                             Functions
+          ***********************************************/
+
+          // Render the goldenlayout based on the sceneNumber
+          function renderLayout(sceneNum){
+
+            removeTooltip();
+
+          /****************************************
+                  Initializing Golden Layout
+          ****************************************/
+
+            // GoldenLayout Configuration format can be found at http://golden-layout.com/tutorials/getting-started.html          
+            let D3ChartConfig = {
+              content: [{
+                  type: 'stack',
+                  isClosable: false,
+                  content:[
+                      {
+                        type: 'component',
+                        componentName: 'D3Chart',
+                        componentState: {  title: 'Edits Allocation Chart',
+                        siteid: '{{request.session.siteid}}',
+                        reference_name: 'chartComponent',
+                        hot_reference_name: 'hotComponent',
+                        dataSource_name: 'chartData'}
+                      }]
+                }]
+            };
+
+            let hotLayoutConfig = {
+              type: 'row',
+              content: [{
+                type: 'component',
+                isClosable: false,
+                componentName: 'HandsonTable',
+                componentState: {
+                    title: 'Handsontable',
+                    siteid: '{{request.session.siteid}}',
+                    reference_name: 'hotComponent',
+                    dataSource_name: 'tableData',
+                    headers_name: 'columnsHeader',
+                    columnsMeta: 'columnsMeta'
+                }
+              }]
+            }
+
+            let siteMapConfig = {
+              type: 'row',
+              content:[{
+                  type: 'component',
+                  isClosable: false,
+              componentName: 'window',
+              componentState: { title: 'window', siteid: '{{request.session.siteid}}' }
+              }]
+            }
+        
+            let multiConfig = {
+              content: [{
+                  type: 'row',
+                  isClosable: false,
+                  content:[
+                      {
+                        type: 'component',
+                        componentName: 'D3Chart',
+                        componentState: {  title: 'Edits Allocation Chart',
+                        siteid: '{{request.session.siteid}}',
+                        reference_name: 'chartComponent',
+                        hot_reference_name: 'hotComponent',
+                        dataSource_name: 'chartData'}
+                      },
+                      {
+                      type: 'column',
+                      content:[{
+                          type: 'component',
+                      componentName: 'window',
+                      componentState: { title: 'window', siteid: '{{request.session.siteid}}' }
+                              },{
+                      type: 'component',
+                      componentName: 'HandsonTable',
+                      componentState: {
+                          title: 'Handsontable',
+                          siteid: '{{request.session.siteid}}',
+                          reference_name: 'hotComponent',
+                          chart_reference_name: 'chartComponent',
+                          dataSource_name: 'tableData',
+                          headers_name: 'columnsHeader',
+                          columnsMeta: 'columnsMeta'
+                        }
+                      }]
+                  }]
+              }]
+            };
+
+            // store all configs in an array
+            var configs = [D3ChartConfig, siteMapConfig, hotLayoutConfig, multiConfig];
+
+            // Get the configuration based on the scene number
+            var goldenLayoutConfig = configs[sceneNum];
+
+            if(goldenLayout && goldenLayout.isInitialised){
+              goldenLayout.destroy();
+            }
+
+            // Create the layout and assign to the inner div with id innerDiv 
+            goldenLayout = new window.GoldenLayout( goldenLayoutConfig, $('.golden-layout-container') );
+
+    
+            if(sceneNum == 0){
+              goldenLayout.registerComponent('D3Chart', D3ChartComponent);
+            }
+            else if(sceneNum == 1){
+             goldenLayout.registerComponent('window', D3ChartComponent);
+            }
+            else if(sceneNum == 2){
+              goldenLayout.registerComponent('HandsonTable', D3ChartComponent);
+            }
+            else if(sceneNum == 3){
+
+              goldenLayout.registerComponent('D3Chart', D3ChartComponent);
+              goldenLayout.registerComponent('window', SiteMapClass);
+              goldenLayout.registerComponent('HandsonTable', HandsonTableComponent);
+            }
+            
+            // Initialize the layout
+            goldenLayout.init(); 
+
+            
+            var addMenuItem = function( title) {
+              var element = $( '<li>' + title + '</li>' );
+              
+              $( '#menuContainer' ).append( element );
+            
+              element.click(function(element, index){
+
+                  d3.select('.container-fluid').attr('style', 'display: none;');            
+                  d3.select('.golden-layout-wrapper').attr('style', 'display: none;');            
+                  let loader = d3.select('#content-wrapper').append('div').attr('class', 'loader');
+                  let loading_msg = d3.select('#content-wrapper').append('p').attr('class', 'loading-message').text('Drawing the golden layout...');
+
+                  if(goldenLayout.isInitialised){
+                    goldenLayout.destroy();
+                  }
+
+                  removeTooltip();  
+                  //handlers for switching between tabs in goldenlayout
+                  if(element.currentTarget.innerText == 'Edits Allocation Chart'){
+
+                    window['sceneNum'] = 0;
+
+                    chartData = generateChartData(data);
+                    tableData = null;
+
+                    // Create the layout and assign to the inner div with id innerDiv 
+                    goldenLayout = new window.GoldenLayout( D3ChartConfig, $('.golden-layout-container') );
+                    goldenLayout.registerComponent('D3Chart', D3ChartComponent);
+
+                  }
+                  else if(element.currentTarget.innerText == 'Site Map'){
+
+                    window['sceneNum'] = 1;
+
+                    tableData = chartData = null;
+                    goldenLayout = new window.GoldenLayout( siteMapConfig, $('.golden-layout-container') );                    
+                    goldenLayout.registerComponent('window', SiteMapClass);
+      
+                  }
+                  else if(element.currentTarget.innerText == 'Handsontable Spreadsheet'){
+
+                    chartData = null;
+
+                    window['sceneNum'] = 2;
+
+                    let tableSchema = generateTableData(data);
+            
+                    tableData = tableSchema['tableData'];
+                    columnsHeader = tableSchema['columnsHeader'];
+                    columnsMeta = tableSchema['columnsMeta'];
+
+                    goldenLayout = new window.GoldenLayout( hotLayoutConfig, $('.golden-layout-container') );                    
+                    goldenLayout.registerComponent('HandsonTable', HandsonTableComponent);
+
+                  }
+                  else if(element.currentTarget.innerText == 'Multi-Window'){
+
+                    window['sceneNum'] = 3;
+                    
+                    let tableSchema = generateTableData(data);
+
+                    chartData = generateChartData(data);
+
+                    tableData = tableSchema['tableData'];
+                    columnsHeader = tableSchema['columnsHeader'];
+                    columnsMeta = tableSchema['columnsMeta'];
+
+                    goldenLayout = new window.GoldenLayout( multiConfig, $('.golden-layout-container') );   
+                    goldenLayout.registerComponent('D3Chart', D3ChartComponent);
+                    goldenLayout.registerComponent('window', SiteMapClass);
+                    goldenLayout.registerComponent('HandsonTable', HandsonTableComponent);
+
+                  }
+
+                  // Remove the loader, the loading message, and display the layout
+                  loader.remove();
+                  loading_msg.remove();
+                  d3.select('.container-fluid').attr('style', 'display: block;');
+                  d3.select('.golden-layout-wrapper').attr('style', 'display: block;');
+
+                  // Initialize the layout
+                  goldenLayout.init(); 
+
+                  if(tooltip)
+                    tooltip.style('display', 'none');
+
+              });
+            };
+            
+            // Add the options for the scenes
+            $('#menuContainer').empty();
+            addMenuItem( 'Edits Allocation Chart');
+            addMenuItem( 'Site Map');
+            addMenuItem( 'Handsontable Spreadsheet');
+            addMenuItem( 'Multi-Window');
+
+            // Make the list in the menu container non-highlightable
+            d3.selectAll('#menuContainer>li').attr('class', 'unselectable');
+            d3.select('#toggleMenu>p#text').attr('class', 'unselectable');
+            if(tooltip)
+              tooltip.style('display', 'none');
+
+          }
+        
+        
+        </script>
+      
+      <!-- If the user has not selected a date range and a turbine range, prompt a search -->
+      {% else %}
+
+    <div>
+      <form action="/dashboard/{{request.session.siteid}}/" method="post">
+        {% csrf_token %}
+        {% include 'wopr/widgets/bs4_form.html' with form=form %}
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </form>
+    </div>
+
+    <script>
+      if('{{message}}'){
+        alert('{{message}}');
+      }
+      const databaseName = 'data_storage';
+      var req = indexedDB.deleteDatabase(databaseName);
+      req.onsuccess = function () {
+          console.log("Deleted database successfully");
+      };
+      req.onerror = function () {
+          console.log("Couldn't delete database");
+      };
+      req.onblocked = function () {
+          console.log("Couldn't delete database due to the operation being blocked");
+      };
+    </script>
+
+      {% endif %}
+
+    <!-- Else if the siteID has not been selected yet-->
+    {% elif siteSelectionForm %}
+    <div>
+      <form action="{% url 'dashboard' %}" method="post">
+          {% csrf_token %}
+          {{ siteSelectionForm }}
+          <input class='btn-success' type="submit" value="Select">
+      </form>
+    </div>
+    {% endif %}
+  <!-- /.container-fluid -->
+  </div>
+<!-- /.content-wrapper -->
+</div>
+
+
+{% endblock %}

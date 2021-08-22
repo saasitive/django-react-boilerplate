@@ -1,0 +1,197 @@
+{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      {% if request.session.siteid %}
+      <li class="breadcrumb-item">Site {{request.session.siteid}}</li>
+      {% endif %}
+      <li class="breadcrumb-item active">Site Config</li>
+    </ol>
+
+    <!-- Page Content -->
+    <h1>Site Config</h1>
+    <hr />
+
+    <!-- If the site is chosen and its siteid is saved in request.session-->
+    {% if request.session.siteid %}
+      <div>
+        Select a Generator Make to filter the search:
+        <input id="genMake" name="search" type="text" class="query-search" placeholder="Enter a make...">
+        <input onclick="filterByMake()" type="button" class="btn btn-primary" value = "Filter"/>
+      </div>
+      <i>Example: Hitatchi, Winergy</i>
+
+      <hr>
+
+      <!-- If the json file from the views is not null, it means the call is successful-->
+      {% if json %}
+
+      <!-- List of hooks-->
+      <div id="hooksList"></div>
+      <!-- SiteConfig Table -->
+      <div id="siteconfigtable"></div>
+      
+      <hr>
+      
+      
+      <script type='text/javascript' name='tableScript'>
+
+        // Array that will keep track of each changes in the data
+        var changesArray = new Array();
+
+        // Variable that will represent the table
+        var handsontable, objectArray;
+        
+        // Counter for the comments
+        var counter = 1;
+
+        // Used for the callbacks
+        var start = new Date().getTime(), timer;
+
+
+        // Waits till the document is ready
+        $(document).ready(function(){
+            // Parse the JSON response
+            var json = JSON.parse("{{json | escapejs}}");
+
+            // Define the array of objects with the length of keys from the json response
+            objectArray = new Array(Object.keys(json).length);
+                
+            // Add in the primary key value to the fields of the JSON since it does not read it as a field
+            for(const i in json){
+              var siteConfigObj = {
+                id: json[i].pk
+              };
+              // Merge the two objects
+              siteConfigObj = {...siteConfigObj, ...json[i].fields};
+              // Store the merged object to an array for the Handsontable to read
+              objectArray[i] = siteConfigObj;
+            }
+
+            // Tutorial for writing a callback at https://handsontable.com/docs/6.2.0/tutorial-using-callbacks.html
+            config = {
+              data: objectArray,
+              colHeaders:  ['siteID', 'ID', 'Turbine', 'KKSName','turbTypeID','Pad','GearboxFrom','Gearbox Make',
+              'Gearbox Model', 'GeneratorFrom','Generator Make', 'Generator Model', 'nn1',  'nn2',  'IncludeInSiteTotals',
+              'MW'],
+              columns :
+                      [{data: 'siteid'},{data: 'id'},{data: 'turbine'} ,{data: 'kksname'} ,{data: 'turbtypeid'}, {data: 'pad'},
+                         {data: 'gearboxfrom'}, {data: 'gearbox_make'}, {data: 'gearbox_model'}, {data: 'generatorfrom'}
+                         ,{data: 'generator_make'}, {data: 'generator_model'}, {data: 'nn1'}, {data: 'nn2'}, {data: 'includeinsitetotals'}, {data: 'mw'}
+                      ],
+              minSpareRows: 1,
+              manualColumnResize: true,
+              manualRowResize: true,
+              height: 400
+              
+            }
+
+            var i = 0;
+            $hooksList = $('#hooksList');
+            var hooks = Handsontable.hooks.getRegistered();  
+
+            // Create the HandsonTable
+            handsontable = new Handsontable(document.getElementById('siteconfigtable'), config);
+        });
+
+        /* Function called to filter the data by the the Generator Make */
+        function filterByMake(){
+          var genMake_val = $("#genMake").val();
+  
+          $.ajax({
+            url: "{% url 'filter-config' %}",
+            data:{
+              "genMake": genMake_val,
+              "siteid": "{{request.session.siteid}}"
+            },
+            type: "GET",
+            success: function (dataFromTemplate) {
+              
+              //Comment out to see the response from the AJAX call
+              //console.log(dataFromTemplate);
+  
+              // Parse the JSON response
+              var json = JSON.parse(dataFromTemplate);
+              // Define the array of objects with the length of keys from the json response
+              var objectArray = new Array(Object.keys(json).length);
+  
+              // Add in the primary key value to the fields of the JSON since it does not read it as a field
+              for(const i in json){
+                var siteConfigObj = {
+                  id: json[i].pk
+                };
+                // Merge the two objects
+                siteConfigObj = {...siteConfigObj, ...json[i].fields};
+                // Store the merged object to an array for the Handsontable to read
+                objectArray[i] = siteConfigObj;
+              }
+              
+              // Update the data of the table and the callback since the objectArray changed
+              handsontable.updateSettings({
+                data: objectArray,
+              })
+  
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+          });
+        }
+      </script>
+      {% endif %}
+
+    {% else %}
+    <div>
+        <p>Select a site to view its configuration data :</p>
+        <input id="siteid" name="search" type="text" class="query-search" placeholder="Enter a siteID...(1432)">
+        <input onclick="getSites()" type="button" class="btn btn-primary" value = "Search"/>
+        <hr />
+        <h2 id="resultsheader"></h2>
+        <ul class="list-group">
+        <div id="siteResults"></div>
+        </ul>
+    </div>
+
+    <script>
+        function getSites(){
+
+          $('#resultsheader').empty();
+          $('#siteResults').empty();
+  
+          $.ajax({
+            url: "{% url 'ajaxT_sites' %}",
+            data: {"siteid": $("#siteid").val()},
+            type: "GET",
+            success: function (dataFromTemplate) {
+
+                if(dataFromTemplate.status){
+                   
+                    var path =  '<a href=' + "\"" + "siteconfig/" + dataFromTemplate.siteid.toString() + "\""  +">"
+                    $('#resultsheader').append("Search Results");
+                    $('#siteResults').append('<li class="list-group-item">' + path + "Site No. " + dataFromTemplate.siteid + '</li>');
+                }
+                else
+                    alert(dataFromTemplate.message);
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+          });
+        }
+    </script>
+    {% endif %}
+    <hr />
+  </div>
+  <!-- /.container-fluid -->
+</div>
+<!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

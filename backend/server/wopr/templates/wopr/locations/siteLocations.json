@@ -1,0 +1,24 @@
+{
+ "locations":[
+         {"siteid":"1432","name":"Soderglen EcoPower Center", "x":"49.5363", "y":"-113.5243"},
+         {"siteid":"1532","name":"Wolfe Island EcoPower Center", "x":"44.179283", "y":"-76.471556"},
+		 {"siteid":"1516","name":"Ardenville", "x":"49.58319", "y":"-113.434123"},
+		 {"siteid":"1512","name":"Blue Trail", "x":"49.655163", "y":"-113.465002"},
+		 {"siteid":"1502","name":"Castle River", "x":"49.51276899", "y":"-114.025552"},
+		 {"siteid":"1466","name":"Kent Breeze", "x":"42.54781", "y":"-82.0569"},
+		 {"siteid":"1481","name":"Kent Hills 1", "x":"45.817897", "y":"-64.891517"},
+		 {"siteid":"1482","name":"Kent Hills 2", "x":"45.817897", "y":"-64.891517"},
+		 {"siteid":"1472","name":"Lakeswind", "x":"46.71818", "y":"-96.21025"},
+		 {"siteid":"1524","name":"Le Nordais Cap-Chat EcoPower", "x":"49.054067", "y":"-66.755996"},
+		 {"siteid":"1526","name":"Le Nordais Matane EcoPower", "x":"48.801214", "y":"-67.579811"},
+		 {"siteid":"1504","name":"McBride Lake", "x":"49.61080414", "y":"-113.4821543"},
+		 {"siteid":"1510","name":"McBride Lake East", "x":"49.583152", "y":"-113.450965"},
+		 {"siteid":"1528","name":"Melancthon I", "x":"44.066858", "y":"-80.279953"},
+		 {"siteid":"1530","name":"Melancthon II", "x":"44.066858", "y":"-80.279953"},
+		 {"siteid":"1448","name":"New Richmond", "x":"48.202639", "y":"-65.719722"},
+		 {"siteid":"1506","name":"Summerview", "x":"49.58328911", "y":"-113.791087"},
+		 {"siteid":"1514","name":"Summerview II", "x":"49.59238103", "y":"-113.7593605"},
+		 {"siteid":"1508","name":"Waterton", "x":"49.21756038", "y":"-113.6805577"},
+		 {"siteid":"1470","name":"Wintering Hills", "x":"51.211539", "y":"-112.56255"}
+        ]
+}

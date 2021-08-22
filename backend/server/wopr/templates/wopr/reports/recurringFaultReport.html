@@ -1,0 +1,79 @@
+{% extends 'wopr/layout.html' %} {%block content %}
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Recurring Faults</li>
+      </ol>
+
+      <!-- Page Content -->
+      <h1>Recurring Faults</h1>
+      <hr />
+      <div>
+        <form action="{% url 'recurFault-report' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input class='btn-success' type="submit" value="Submit">
+        </form>
+        <p>Suggested: 09/03/2012 12:00:00 to 11/03/2012 09:14:00</p>
+      </div>
+      <br><br><br><br>
+      <div>
+        {% if selection %}
+          {% if turbinesData %}
+            <table class="table">
+              <tr>
+                <th>Turbine</th>
+                <th>eventID</th>
+                <!--<th>eventDesc</th>-->
+                <th>eventCount</th>
+                <th>tsMin</th>
+                <th>tsMax</th>
+              </tr>
+              {% for key, values in turbinesData.items %}
+                <tr> 
+                  <td class="small">{{ key }}</td>
+                  <td class="small">{{ values.eventid }}</td>
+                  <td class="small">{{ values.count }}</td>
+                  <td class="small">{{ values.tsMin }}</td>
+                  <td class="small">{{ values.tsMax }}</td>
+                </tr>
+              {% endfor %}
+            </table>
+          {% else %}
+            <br><br>
+            <p style='font-weight: bold; text-align: center'>No data available for this time range.</p>
+          {% endif %}
+          <br><br><br><br>
+          {% if eventsData %}
+            <table class="table">
+            <tr>
+              <th>eventID</th>
+              <!--<th>eventDesc</th>-->
+              {% for item in turbinesList %}
+              <th>{{ item }}</th>
+              {% endfor %}
+              {% for key, values in eventsData.items %}
+              <tr> 
+                <td class="small">{{ key }}</td>
+                {% for item in values %}
+                  <td class="small">{{ item.count }}</td>
+                {% endfor %}
+              </tr>
+              {% endfor %}
+            </table>
+          {% else %}
+            <br><br>
+            <p style='font-weight: bold; text-align: center'>No data available for this time range.</p>
+          {% endif %}
+        {% endif %}
+      </div>
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

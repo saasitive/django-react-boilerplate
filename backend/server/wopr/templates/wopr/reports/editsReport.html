@@ -1,0 +1,53 @@
+{% extends 'wopr/layout.html' %} {%block content %}
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Edits Report</li>
+      </ol>
+
+      <!-- Page Content -->
+      <h1>Edits Report</h1>
+      <hr />
+      <div>
+        {% if quality_report %}
+        <table class="table">
+            <tr>
+              <th>EditID</th>
+              <th>time of edit (UTC-7)</th>
+              <th>Site</th>
+              <th>Turbine</th>
+              <th>rangeFrom (site time)</th>
+              <th>rangeTo (site time)</th>
+              <th>EditStart</th>
+              <th>Edit End</th>
+              <th>UserName</th>
+              <th>Comment</th>
+            </tr>
+          {% for item in quality_report %}
+            <tr> 
+              <td class="small">{{ item.editID }}</td>
+              <td class="small">{{ item.ts_edit }}</td>
+              <td class="small">{{ item.description }}</td>
+              <td class="small">{{ item.Turbine }}</td>
+              <td class="small">{{ item.period_from }}</td>
+              <td class="small">{{ item.period_to }}</td>
+              <td class="small">{{ item.ts_EditStart }}</td>
+              <td class="small">{{ item.ts_EditEnd }}</td>
+              <td class="small">{{ item.username }}</td>
+              <td class="small">{{ item.comment }}</td>
+            </tr>
+          {% endfor %}
+        </table>
+        {% endif %}
+      </div>
+
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'wopr/layout.html' %} {% block content %}
+
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Breadcrumbs -->
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item active">Reports Form</li>
+      </ol>
+
+      <!-- Page Content -->
+      <h2>Edits Quality Checks Report</h2>
+      <br><small>The datetimes to input here are the time that the edit was made UTC. Format: DD/MM/YYYY. The HH:MM for a day dont matter for this report.</small>
+      <br><small>Example: Sooderglen &emsp; 05/08/2015 00:00  &emsp;  05/08/2015 00:00</small>
+      <br><small>Example: Sooderglen &emsp; 15/11/2017 00:00  &emsp;  17/11/2017 00:00</small>
+      <br><small>Example: Sooderglen &emsp; 08/03/2012 00:00  &emsp;  15/03/2012 00:00</small>
+      <div>
+            <form action="{% url 'editsQuality-report' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input class='btn-success' type="submit" value="Submit">
+            </form>
+      </div>
+
+      <DIV>
+          {% if occurrences_report %}
+          <h1>Occurrences Table</h1>
+            <table class="table">
+                <tr>
+                <th>Date</th>
+                <th>Edited CTH w/ non-CTH system</th>
+                <th>No Data</th>
+                <th>State Change Mid-Event</th>
+                <th>System Change Mid-Event</th>
+                <th>Blue & Red Boxes not marked</th>
+                <th>Site Boxes not marked</th>
+                </tr>
+            {% for item in occurrences_report %}
+                <tr> 
+                <td class="small">{{ item.0 }}</td>
+                <td class="small">{{ item.1 }}</td>
+                <td class="small">{{ item.2 }}</td>
+                <td class="small">{{ item.3 }}</td>
+                <td class="small">{{ item.4 }}</td>
+                <td class="small">{{ item.5 }}</td>
+                <td class="small">{{ item.6 }}</td>
+                </tr>
+            {% endfor %}
+            </table>
+            {% endif %}
+      </DIV>
+
+
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

@@ -7,6 +7,7 @@ from apps.notes.urls import notes_urlpatterns
 urlpatterns = [
     path('api/', include('core.urls')),
     path('admin/', admin.site.urls),
+    path('wopr/', include('wopr.urls')),
 ]
 
 urlpatterns += accounts_urlpatterns # add URLs for authentication

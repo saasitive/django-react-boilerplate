@@ -1,0 +1,14 @@
+<div class="input-group date" id="{{ widget.datetimepicker_id }}" data-target-input="nearest">
+        {% include "django/forms/widgets/input.html" %}
+        <div class="input-group-append" data-target="#{{ widget.datetimepicker_id }}" data-toggle="datetimepicker">
+          <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+        </div>
+      </div>
+      
+      <script>
+        $(function () {
+          $("#{{ widget.datetimepicker_id }}").datetimepicker({
+            format: 'DD/MM/YYYY HH:mm', //2012-03-10 14:30 right. 02/10/2019 3:49 PM wrong
+          });
+        });
+      </script>

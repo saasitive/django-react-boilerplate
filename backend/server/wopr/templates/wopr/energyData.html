@@ -1,0 +1,202 @@
+{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+
+<div id="content-wrapper">
+  <div class="container-fluid">
+    <!-- Breadcrumbs -->
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      {% if request.session.siteid %}
+      <li class="breadcrumb-item">Site {{request.session.siteid}}</li>
+      {% endif %}
+      <li class="breadcrumb-item active">Energy Data</li>
+    </ol>
+
+    <!-- Page Content -->
+    <h1>Energy Data</h1>
+    <hr />
+
+    <!-- If the site is chosen and its siteid is saved in request.session-->
+    {% if request.session.siteid %}
+      <div>
+        Select a time from:
+        <input id="start_date" name="search" type="date" class="query-search" placeholder="Enter a date...">
+        <input id="start_time" name="search" type="time" class="query-search" placeholder="Enter a time...">
+      </div>
+      <i>Example: 2012-03-09 0:10</i>
+      <div>
+        Select a time till:
+        <input id="end_date" name="search" type="date" class="query-search" placeholder="Enter a date...">
+        <input id="end_time" name="search" type="time" class="query-search" placeholder="Enter a time...">
+      </div>
+      <i>Example: 2012-03-09 2:00</i>
+      <div>
+        <input onclick="filterByTime()" type="button" class="btn btn-primary" value = "Filter"/>
+      </div>
+      
+      <hr />
+
+      <!-- If the json file from the views is not null, it means the call is successful-->
+      {% if json %}
+
+      <!-- List of hooks-->
+      <div id="hooksList"></div>
+      <!-- Energy Table -->
+      <div id="energytable"></div>
+
+      <hr>
+      
+
+      <script type='text/javascript' name='tableScript'>    
+        
+        // Array that will keep track of each changes in the data
+        var changesArray = new Array();
+
+        // Variable that will represent the table
+        var handsontable, objectArray;
+        
+        // Counter for the comments
+        var counter = 1;
+
+        // Used for the callbacks
+        var start = new Date().getTime(), timer;
+
+        // Waits till the document is ready
+        $(document).ready(function(){
+          
+            // Parse the JSON response to a JS array
+            var json = JSON.parse("{{json | escapejs}}");
+
+            // Define the array of objects with the length of keys from the json response
+            objectArray = new Array(Object.keys(json).length);
+    
+            // Add in the primary key value to the fields of the JSON since it does not read it as a field
+            for(const i in json){
+              var eventDataObj = {
+                periodid: json[i].pk
+              };
+              // Merge the two objects
+              eventDataObj = {...eventDataObj, ...json[i].fields};
+              // Store the merged object to an array for the Handsontable to read
+              objectArray[i] = eventDataObj;
+            }
+            // Tutorial for writing a callback at https://handsontable.com/docs/6.2.0/tutorial-using-callbacks.html
+            config = {
+              data: objectArray,
+              colHeaders:  ['SiteID', 'ID', 'Timestamp', 'PeriodID','nws','kw_net','kw_exp','validfrom',
+                'validto', 'kw_min_exp','curtailed', 'edited'],
+                columns :
+                        [{data: 'siteid'},{data: 'id'},{data: 'ts'} ,{data: 'periodid'} ,{data: 'nws'}, {data: 'kw_net'},
+                           {data: 'kw_exp'}, {data: 'validfrom'}, {data: 'validto'}, {data: 'kw_min_exp'}
+                           ,{data: 'curtailed'}, {data: 'edited'}
+                        ],
+              minSpareRows: 1,
+              manualColumnResize: true,
+              manualRowResize: true,
+              height: 400
+              
+            }
+            
+            // Create the HandsonTable
+            handsontable = new Handsontable(document.getElementById('energytable'), config);
+        });
+
+        /* Function called to filter the data by the timestamp from and till */
+        function filterByTime(){
+          var ts_from_value = $("#start_date").val() + " " + $("#start_time").val();
+          var ts_till_from = $("#end_date").val() + " " + $("#end_time").val();
+  
+          $.ajax({
+            url: "{% url 'filter-energy' %}",
+            data:{
+                "ts_start_from": ts_from_value,
+                "ts_until": ts_till_from,
+                "siteid": "{{request.session.siteid}}"
+
+            },
+            type: "GET",
+            
+            success: function (dataFromTemplate) {
+
+              //Comment out to see the response from the AJAX call
+              //console.log(dataFromTemplate);
+              
+              // Parse the JSON response
+              var json = JSON.parse(dataFromTemplate);
+              // Define the array of objects with the length of keys from the json response
+              objectArray = new Array(Object.keys(json).length);
+  
+              // Add in the primary key value to the fields of the JSON since it does not read it as a field
+              for(const i in json){
+                var eventDataObj = {
+                  periodid: json[i].pk
+                };
+                // Merge the two objects
+                eventDataObj = {...eventDataObj, ...json[i].fields};
+                // Store the merged object to an array for the Handsontable to read
+                objectArray[i] = eventDataObj;
+              }
+
+              // Update the data of the table and the callback since the objectArray changed
+              handsontable.updateSettings({
+                data: objectArray,
+              })
+            },
+            error: function(error_data){
+                console.log("error")
+                console.log(error_data)
+            }
+          });
+        }
+      </script>
+      {% endif %}
+
+    {% else %}
+      <div>
+          <p>Select a site to view its energy data :</p>
+          <input id="siteid" name="search" type="text" class="query-search" placeholder="Enter a siteID...(1432)">
+          <input onclick="getSites()" type="button" class="btn btn-primary" value = "Search"/>
+          <hr />
+          <h2 id="resultsheader"></h2>
+          <ul class="list-group">
+          <div id="siteResults"></div>
+          </ul>
+      </div>
+
+      <script>
+          function getSites(){
+
+            $('#resultsheader').empty()
+            $('#siteResults').empty()
+    
+            $.ajax({
+              url: "{% url 'ajaxT_sites' %}",
+              data: {"siteid": $("#siteid").val()},
+              type: "GET",
+              success: function (dataFromTemplate) {
+
+                  if(dataFromTemplate.status){
+                    
+                      var path =  '<a href=' + "\"" + "energy/" + dataFromTemplate.siteid.toString() + "\""  +">"
+                      $('#resultsheader').append("Search Results");
+                      $('#siteResults').append('<li class="list-group-item">' + path + "Site No. " + dataFromTemplate.siteid + '</li>');
+                  }
+                  else
+                      alert(dataFromTemplate.message);
+              },
+              error: function(error_data){
+                  console.log("error")
+                  console.log(error_data)
+              }
+            });
+          }
+      </script>
+    {% endif %}
+      <hr/>
+    </div>
+  <!-- /.container-fluid -->
+</div>
+<!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

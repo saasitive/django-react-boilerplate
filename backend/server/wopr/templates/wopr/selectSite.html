@@ -1,0 +1,42 @@
+{% extends 'wopr/layout.html' %} {%block content %}
+
+<div id="content-wrapper">
+    <div class="container-fluid">
+      <!-- Page Content -->
+      <h1>{{title}}</h1>
+
+      <hr>
+      
+      <div>
+        <form action="{% url 'selectSite' %}" method="post">
+            {% csrf_token %}
+            {{ form }}
+            <input class='btn-success' type="submit" value="Select">
+        </form>
+      </div>
+
+      <script>
+        if('{{message}}'){
+          alert('{{message}}');
+        }
+        const databaseName = 'data_storage';
+        var req = indexedDB.deleteDatabase(databaseName);
+        req.onsuccess = function () {
+            console.log("Deleted database successfully");
+        };
+        req.onerror = function () {
+            console.log("Couldn't delete database");
+        };
+        req.onblocked = function () {
+            console.log("Couldn't delete database due to the operation being blocked");
+        };
+      </script>
+
+    </div>
+    <!-- /.container-fluid -->
+  </div>
+  <!-- /.content-wrapper -->
+</div>
+<!-- /#wrapper -->
+
+{% endblock %}

@@ -1,0 +1,4 @@
+<option value=""> </option>
+{% for turbine in turbines %}
+<option value="{{ turbine.id }}-{{ turbine.turbine }}">Turbine {{ turbine.id }}: {{ turbine.turbine }}</option>
+{% endfor %}

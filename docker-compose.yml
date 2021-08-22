@@ -33,9 +33,10 @@ services:
         expose:
             - 8000
     db:
-        image: postgres:13-alpine
+        build:
+            context: ./docker/db
+            dockerfile: Dockerfile
         environment:
-            - POSTGRES_HOST=${DB_HOST}        
             - POSTGRES_DB=${DB_NAME}
             - POSTGRES_USER=${DB_USER}
             - POSTGRES_PASSWORD=${DB_PASS}

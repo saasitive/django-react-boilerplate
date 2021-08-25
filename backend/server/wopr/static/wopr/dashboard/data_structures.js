@@ -134,6 +134,10 @@ D3ChartComponent.prototype._drawChart = function() {
     });
 
 
+    // hardcode the start and end date for edits chart
+    ts_start_global = '2012-03-09 00:00:00+00:00'
+    ts_end_global = '2012-03-16 00:00:00+00:00'
+
     // Date and time range boundaries used by the xScale
     this.fromTime = moment.utc(ts_start_global).tz(timezone);
     this.toTime = moment.utc(ts_end_global).tz(timezone);

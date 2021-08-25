@@ -3,6 +3,7 @@ from django.views.generic import TemplateView
 
 from . import views
 
+app_name = 'wopr'
 urlpatterns = [
 
     # Paths for 404, blank, and the index/dashboard

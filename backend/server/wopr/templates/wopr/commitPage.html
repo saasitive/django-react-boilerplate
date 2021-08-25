@@ -40,7 +40,7 @@
   <div class="container-fluid">
     <!-- Breadcrumbs -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
       <li class="breadcrumb-item active">Commit Page</li>
     </ol>
 
@@ -70,7 +70,7 @@
                 changesSaved = true;
                 changesArray = '';
                 $.ajax({
-                    url: "{% url 'discard-changes' %}",
+                    url: "{% url 'wopr:discard-changes' %}",
                     data:{
                         changesArray: JSON.stringify(changesArray),
                         csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -103,7 +103,7 @@
                 // Save it!
                 changesSaved = true;
                 $.ajax({
-                    url: "{% url 'commit-changes' %}",
+                    url: "{% url 'wopr:commit-changes' %}",
                     data:{
                         changesArray: JSON.stringify(changesArray),
                         csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -115,7 +115,6 @@
                         const databaseName = 'data_storage';
                         var req = indexedDB.deleteDatabase(databaseName);
                         req.onsuccess = function () {
-                            console.log("Deleted database successfully");
                             location = location
                         };
                         req.onerror = function () {
@@ -244,7 +243,7 @@
 
             // Get the changes array from sessions
             $.ajax({
-              url: "{% url 'ajax_changes_array' %}",
+              url: "{% url 'wopr:ajax_changes_array' %}",
               type: "GET",
               
               success: function (dataFromTemplate) {

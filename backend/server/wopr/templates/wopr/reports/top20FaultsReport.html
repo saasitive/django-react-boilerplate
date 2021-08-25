@@ -1,4 +1,4 @@
-{% extends 'wopr/layout.html' %} {% load staticfiles %} {% block content %}
+{% extends 'wopr/layout.html' %} {% load static %} {% block content %}
 <!DOCTYPE html>
 <html>
     <head> 
@@ -21,7 +21,7 @@
                 <h1>Top 20 faults</h1>
                 <hr />
                 <!-- Form -->
-                <form action="{% url 'top20Fault-report' %}" method="post">
+                <form action="{% url 'wopr:top20Fault-report' %}" method="post">
                     {% csrf_token %}
                     {{ form }}
                     <input class='btn-success' type="submit" value="Submit">

@@ -301,8 +301,8 @@ def makeChoicesList_EditsQualityCheck():
     siteNames = TSites.objects.distinct().values_list( 'siteid', 'description' )
 
     siteList = []     
-    for each in siteNames:
-        tup = (each['siteid'], each['description'])
+    for siteid, description in siteNames:
+        tup = ('siteid', 'description')
         siteList.append(tup)
     
     return siteList
@@ -311,9 +311,10 @@ def makeSiteList():
     # could have got this with the orm
     siteNames = TSites.objects.distinct().values_list( 'siteid', 'description' )
 
-    siteList = [' ', ' ']
-    for each in siteNames:
-        tup = (each['siteid'], each['description'] + ', ' + str(each['siteid']))
+    siteList = [ ( ' ', ' ' ) ]
+    print( siteNames )
+    for siteid, description in siteNames:
+        tup = (siteid, description + ', ' + str(siteid))
         siteList.append(tup)
     
     return siteList

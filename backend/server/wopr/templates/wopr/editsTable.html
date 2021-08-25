@@ -1,10 +1,10 @@
-{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+{% extends 'wopr/layout.html' %} {% load static %} {% block content %}
 
 <div id="content-wrapper">
   <div class="container-fluid">
     <!-- Breadcrumbs -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
       {% if request.session.siteid %}
       <li class="breadcrumb-item">Site {{request.session.siteid}}</li>
       {% endif %}
@@ -107,7 +107,7 @@
           var username_val = $("#username").val();
   
           $.ajax({
-            url: "{% url 'filter-edits' %}",
+            url: "{% url 'wopr:filter-edits' %}",
             data:{
               "username": username_val,
               "siteid": "{{request.session.siteid}}"
@@ -168,14 +168,14 @@
           $('#siteResults').empty();
   
           $.ajax({
-            url: "{% url 'ajaxT_sites' %}",
+            url: "{% url 'wopr:ajaxT_sites' %}",
             data: {"siteid": $("#siteid").val()},
             type: "GET",
             success: function (dataFromTemplate) {
 
                 if(dataFromTemplate.status){
                    
-                    var path =  '<a href=' + "\"" + "editsTable/" + dataFromTemplate.siteid.toString() + "\""  +">"
+                    var path =  '<a href=' + "\"" + "wopr/editsTable/" + dataFromTemplate.siteid.toString() + "\""  +">"
                     $('#resultsheader').append("Search Results");
                     $('#siteResults').append('<li class="list-group-item">' + path + "Site No. " + dataFromTemplate.siteid + '</li>');
                 }

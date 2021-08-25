@@ -4,13 +4,13 @@
     <div class="container-fluid">
       <!-- Breadcrumbs -->
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
         <li class="breadcrumb-item active">Reports Form</li>
       </ol>
 
       <!-- THIS PAGE IS THE STARTING POINT FOR USING THE DATETIME PICKER FORM -->
       <div>
-            <form action="{% url 'site-start-end-form' %}" method="post">
+            <form action="{% url 'wopr:site-start-end-form' %}" method="post">
                 {% csrf_token %}
                 {{ form }}
                 <input class='btn-success' type="submit" value="Submit">

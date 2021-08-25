@@ -2,7 +2,8 @@ from django.db import models
 
 
 class TEventcodes(models.Model):
-    eventid = models.IntegerField(db_column='EventID', primary_key=True)  # Field name made lowercase.
+    autoid = models.AutoField( primary_key = True )
+    eventid = models.IntegerField(db_column='EventID')  # Field name made lowercase.
     description = models.CharField(db_column='Description', max_length=500, blank=True, null=True)  # Field name made lowercase.
     defaultstateid = models.IntegerField(db_column='DefaultStateID')  # Field name made lowercase.
     defaultsystemid = models.IntegerField(db_column='DefaultSystemID')  # Field name made lowercase.
@@ -16,6 +17,7 @@ class TEventcodes(models.Model):
 
 
 class TEventdata(models.Model):
+    autoid = models.AutoField( primary_key = True )
     siteid = models.ForeignKey('TSites', models.DO_NOTHING, db_column='SiteID')   # Field name made lowercase.
     id = models.ForeignKey('TSiteconfig', models.DO_NOTHING, db_column='ID')  # Field name made lowercase.
     ts_start = models.DateTimeField()
@@ -25,7 +27,7 @@ class TEventdata(models.Model):
     stateid = models.IntegerField(db_column='StateID', blank=True, null=True)  # Field name made lowercase.
     systemid = models.IntegerField(db_column='SystemID', blank=True, null=True)  # Field name made lowercase.
     ts_end = models.DateTimeField()
-    periodid = models.BigIntegerField(db_column='periodID', primary_key=True)  # Field name made lowercase.
+    periodid = models.BigIntegerField(db_column='periodID')  # Field name made lowercase.
     eventkey = models.BigIntegerField(db_column='EventKey')  # Field name made lowercase.
     statekey = models.BigIntegerField(db_column='StateKey', blank=True, null=True)  # Field name made lowercase.
     systemkey = models.BigIntegerField(db_column='SystemKey', blank=True, null=True)  # Field name made lowercase.
@@ -38,7 +40,8 @@ class TEventdata(models.Model):
 
 
 class TEventdataEdited(models.Model):
-    siteid = models.IntegerField(db_column='SiteID', primary_key=True)  # Field name made lowercase.
+    autoid = models.AutoField( primary_key = True )
+    siteid = models.IntegerField(db_column='SiteID')  # Field name made lowercase.
     id = models.IntegerField(db_column='ID')  # Field name made lowercase.
     ts_start = models.DateTimeField()
     eventid = models.IntegerField(db_column='EventID')  # Field name made lowercase.

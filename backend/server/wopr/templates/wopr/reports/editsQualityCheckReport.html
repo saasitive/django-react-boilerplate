@@ -4,7 +4,7 @@
     <div class="container-fluid">
       <!-- Breadcrumbs -->
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
         <li class="breadcrumb-item active">Reports Form</li>
       </ol>
 
@@ -15,7 +15,7 @@
       <br><small>Example: Sooderglen &emsp; 15/11/2017 00:00  &emsp;  17/11/2017 00:00</small>
       <br><small>Example: Sooderglen &emsp; 08/03/2012 00:00  &emsp;  15/03/2012 00:00</small>
       <div>
-            <form action="{% url 'editsQuality-report' %}" method="post">
+            <form action="{% url 'wopr:editsQuality-report' %}" method="post">
                 {% csrf_token %}
                 {{ form }}
                 <input class='btn-success' type="submit" value="Submit">

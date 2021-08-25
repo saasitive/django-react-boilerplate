@@ -8,7 +8,7 @@
       <hr>
       
       <div>
-        <form action="{% url 'selectSite' %}" method="post">
+        <form action="{% url 'wopr:selectSite' %}" method="post">
             {% csrf_token %}
             {{ form }}
             <input class='btn-success' type="submit" value="Select">
@@ -22,7 +22,6 @@
         const databaseName = 'data_storage';
         var req = indexedDB.deleteDatabase(databaseName);
         req.onsuccess = function () {
-            console.log("Deleted database successfully");
         };
         req.onerror = function () {
             console.log("Couldn't delete database");

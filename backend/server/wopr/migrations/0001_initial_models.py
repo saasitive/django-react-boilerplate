@@ -194,7 +194,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TPowercurves',
             fields=[
-                ('siteid', models.IntegerField(db_column='siteID', primary_key=True, serialize=False)),
+                ('powercurveid', models.AutoField( primary_key=True )),
+                ('siteid', models.IntegerField(db_column='siteID')),
                 ('id', models.IntegerField()),
                 ('nws_bin', models.DecimalField(decimal_places=1, max_digits=5)),
                 ('kw', models.FloatField(blank=True, db_column='kW', null=True)),
@@ -204,7 +205,7 @@ class Migration(migrations.Migration):
             ],
             options={
                 'db_table': 't_powerCurves',
-                'unique_together': {('siteid', 'id', 'nws_bin')},
+                'unique_together': {('id', 'nws_bin')},
             },
         ),
         migrations.CreateModel(
@@ -222,7 +223,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TEventdataEdited',
             fields=[
-                ('siteid', models.IntegerField(db_column='SiteID', primary_key=True, serialize=False)),
+                ('autoid', models.AutoField(primary_key=True, serialize=False)),
+                ('siteid', models.IntegerField(db_column='SiteID')),
                 ('id', models.IntegerField(db_column='ID')),
                 ('ts_start', models.DateTimeField()),
                 ('eventid', models.IntegerField(db_column='EventID')),
@@ -247,6 +249,7 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TEventdata',
             fields=[
+                ('autoid', models.AutoField(primary_key=True, serialize=False)),
                 ('ts_start', models.DateTimeField()),
                 ('eventid', models.IntegerField(db_column='EventID')),
                 ('param1', models.FloatField(blank=True, null=True)),
@@ -254,7 +257,7 @@ class Migration(migrations.Migration):
                 ('stateid', models.IntegerField(blank=True, db_column='StateID', null=True)),
                 ('systemid', models.IntegerField(blank=True, db_column='SystemID', null=True)),
                 ('ts_end', models.DateTimeField()),
-                ('periodid', models.BigIntegerField(db_column='periodID', primary_key=True, serialize=False)),
+                ('periodid', models.BigIntegerField(db_column='periodID')),
                 ('eventkey', models.BigIntegerField(db_column='EventKey')),
                 ('statekey', models.BigIntegerField(blank=True, db_column='StateKey', null=True)),
                 ('systemkey', models.BigIntegerField(blank=True, db_column='SystemKey', null=True)),
@@ -271,7 +274,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='TEventcodes',
             fields=[
-                ('eventid', models.IntegerField(db_column='EventID', primary_key=True, serialize=False)),
+                ('autoid', models.AutoField(primary_key=True, serialize=False)),
+                ('eventid', models.IntegerField(db_column='EventID')),
                 ('description', models.CharField(blank=True, db_column='Description', max_length=500, null=True)),
                 ('defaultstateid', models.IntegerField(db_column='DefaultStateID')),
                 ('defaultsystemid', models.IntegerField(db_column='DefaultSystemID')),

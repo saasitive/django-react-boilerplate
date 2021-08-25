@@ -22,7 +22,7 @@
     <link href="{% static 'wopr/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
 
     <!-- Custom fonts for this template-->
-    <link href="{% static 'wopr/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
 
     <!-- Custom styles for this template-->
     <link href="{% static 'wopr/css/sb-admin.css' %}" rel="stylesheet">
@@ -51,7 +51,7 @@
 
     <nav class="navbar navbar-expand navbar-dark nav static-top">
 
-      <a class="navbar-brand mr-1" href="">WOPR Edits</a>
+      <a class="navbar-brand mr-1" href="{% url 'wopr:index' %}">WOPR Edits</a>
 
       <button class="btn btn-link btn-sm text-white order-1 order-sm-0" id="sidebarToggle" href="#">
         <i class="fas fa-bars"></i>
@@ -77,10 +77,10 @@
             <span class="badge badge-danger">9+</span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">View Notifications</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Set a Notification</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Configure Notification Settings</a>
           </div>
         </li>
         <li class="nav-item dropdown no-arrow mx-1">
@@ -89,10 +89,10 @@
             <span class="badge badge-danger">7</span>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="messagesDropdown">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">View Messages</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Create a Message</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">Something else here</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Configure Message Settings</a>
           </div>
         </li>
         <li class="nav-item dropdown no-arrow">
@@ -100,10 +100,10 @@
             <i class="fas fa-user-circle fa-fw"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right" aria-labelledby="userDropdown">
-            <a class="dropdown-item" href="#">Settings</a>
-            <a class="dropdown-item" href="#">Activity Log</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Settings</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}">Activity Log</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">Logout</a>
+            <a class="dropdown-item" href="{% url 'wopr:index' %}" data-toggle="modal" data-target="#logoutModal">Logout</a>
           </div>
         </li>
       </ul>
@@ -115,7 +115,7 @@
       <!-- Sidebar -->
       <ul class="sidebar navbar-nav toggled">
 		  <li class="nav-item">
-          <a class="nav-link" href="{% url 'selectSite' %}">
+          <a class="nav-link" href="{% url 'wopr:selectSite' %}">
           <i class="fas fa-hand-pointer"></i>
           {% if request.session.siteid %}
             <span>Select another Site</span>
@@ -126,11 +126,11 @@
       </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="dashboard/{{request.session.siteid}}">
+            <a class="nav-link" href="wopr/dashboard/{{request.session.siteid}}">
               <i class="fas fa-fw fa-tachometer-alt"></i>
               <span>Site: {{request.session.siteid}}</span>
           {% else %}
-            <a class="nav-link" href="{% url 'dashboard' %}">
+            <a class="nav-link" href="{% url 'wopr:dashboard' %}">
               <i class="fas fa-fw fa-tachometer-alt"></i>
               <span>Dashboard</span>
           {% endif %}
@@ -143,23 +143,23 @@
           </a>
           <div class="dropdown-menu" aria-labelledby="pagesDropdown">
             <h6 class="dropdown-header">Generate Reports:</h6>
-            <a class="dropdown-item" href="{% url 'edits-report' %}">Edits Report</a>
-            <a class="dropdown-item" href="{% url 'editsQuality-report' %}">Edits Quality Report</a> <!-- 190209 -->
-            <a class="dropdown-item" href="{% url 'powerCurve-report' %}">Power Curve Report</a>
-            <a class="dropdown-item" href="{% url 'recurFault-report' %}">Recurring Faults Report</a>
-            <a class="dropdown-item" href= "{% url 'top20Fault-report' %}">Top 20 Faults Report</a>
+            <a class="dropdown-item" href="{% url 'wopr:edits-report' %}">Edits Report</a>
+            <a class="dropdown-item" href="{% url 'wopr:editsQuality-report' %}">Edits Quality Report</a> <!-- 190209 -->
+            <a class="dropdown-item" href="{% url 'wopr:powerCurve-report' %}">Power Curve Report</a>
+            <a class="dropdown-item" href="{% url 'wopr:recurFault-report' %}">Recurring Faults Report</a>
+            <a class="dropdown-item" href= "{% url 'wopr:top20Fault-report' %}">Top 20 Faults Report</a>
             <!--{% if request.session.siteid %}
-            <a class="dropdown-item" href='reports/top20FaultsReport/{{request.session.siteid}}' >Top 20 Faults Report</a>
+            <a class="dropdown-item" href='wopr/reports/top20FaultsReport/{{request.session.siteid}}' >Top 20 Faults Report</a>
             {% else %}
-            <a class="dropdown-item" href= "{% url 'top20Fault-report' %}">Top 20 Faults Report</a>
+            <a class="dropdown-item" href= "{% url 'wopr:top20Fault-report' %}">Top 20 Faults Report</a>
             {% endif %} -->           
           
         </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="editsTable/{{request.session.siteid}}">
+            <a class="nav-link" href="wopr/editsTable/{{request.session.siteid}}">
           {% else %}
-            <a class="nav-link" href="{% url 'edits-table' %}">            
+            <a class="nav-link" href="{% url 'wopr:edits-table' %}">            
           {% endif %}
               <i class="fas fa-table"></i>
               <span>Edits Table</span>
@@ -167,9 +167,9 @@
         </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="siteconfig/{{request.session.siteid}}">
+            <a class="nav-link" href="wopr/siteconfig/{{request.session.siteid}}">
           {% else %}
-            <a class="nav-link" href="{% url 'site-config' %}">
+            <a class="nav-link" href="{% url 'wopr:site-config' %}">
           {% endif %}
               <i class="fas fa-wrench"></i>
               <span>Site Config</span>
@@ -177,9 +177,9 @@
         </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="events/{{request.session.siteid}}">
+            <a class="nav-link" href="wopr/events/{{request.session.siteid}}">
           {% else %}
-            <a class="nav-link" href="{% url 'events-data'  %}">     
+            <a class="nav-link" href="{% url 'wopr:events-data'  %}">     
           {% endif %}
             <i class="far fa-calendar"></i>
             <span>Event Data</span>
@@ -187,9 +187,9 @@
         </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="energy/{{request.session.siteid}}">
+            <a class="nav-link" href="wopr/energy/{{request.session.siteid}}">
           {% else %}
-            <a class="nav-link" href="{% url 'energy-data'  %}">                 
+            <a class="nav-link" href="{% url 'wopr:energy-data'  %}">                 
           {% endif %}
             <i class="fas fa-bolt"></i>
             <span>Energy Data</span>
@@ -197,7 +197,7 @@
         </li>
         <li class="nav-item">
           {% if request.session.siteid %}
-            <a class="nav-link" href="{% url 'commit-page'  %}">
+            <a class="nav-link" href="{% url 'wopr:commit-page'  %}">
             <i class="fas fa-database"></i>
             <span>Commit Page</span>
           {% else %}
@@ -207,13 +207,13 @@
           </a>
         </li>
         <li class="nav-item">
-              <a class="nav-link" href="{% url 'iesoUpload'  %}">
+              <a class="nav-link" href="{% url 'wopr:iesoUpload'  %}">
               <i class="fas fa-envelope"></i>
               <span>IESO Upload</span>
             </a>
         </li>
 		    <li class="nav-item">
-          <a class="nav-link" id="instructions-link" href="{% url 'instructions' %}">
+          <a class="nav-link" id="instructions-link" href="{% url 'wopr:instructions' %}">
             <i class="fas fa-question-circle"></i>
             <span>Instructions</span>
           </a>
@@ -225,7 +225,7 @@
       <script>
           if(!'{{request.session.django_timezone}}'){
             $.ajax({
-              url: "{% url 'time-zone' %}",
+              url: "{% url 'wopr:time-zone' %}",
                 data:{
                     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
                     csrfmiddlewaretoken: '{{ csrf_token }}'

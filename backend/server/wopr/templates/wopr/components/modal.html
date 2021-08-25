@@ -5,7 +5,7 @@
   <div class="container-fluid">
     <!-- Breadcrumbs -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
       <li class="breadcrumb-item active">{{title}}</li>
     </ol>
 
@@ -35,7 +35,7 @@
                 </label>
               </div>
             </div>
-            <a class="btn btn-primary btn-block" href="{% url 'index' %}">Login</a>
+            <a class="btn btn-primary btn-block" href="{% url 'wopr:index' %}">Login</a>
           </form>
           <div class="text-center">
             <a class="d-block small mt-3" href="register.html">Register an Account</a>

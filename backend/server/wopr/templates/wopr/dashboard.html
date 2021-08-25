@@ -45,9 +45,9 @@ crossorigin="">
     
     <!-- Breadcrumbs -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Select a Site</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Select a Site</a></li>
       {% if request.session.siteid %}
-      <li  class="breadcrumb-item"><a href="dashboard/{{request.session.siteid}}/?reselect=true">Site {{request.session.siteid}}</a></li>
+      <li  class="breadcrumb-item"><a href="wopr/dashboard/{{request.session.siteid}}/?reselect=true">Site {{request.session.siteid}}</a></li>
       {% endif %}
       <li class="breadcrumb-item active">Edits Allocation</li>
     </ol>
@@ -56,7 +56,7 @@ crossorigin="">
     <!-- Page Content -->
     <div>
         <h1 style="display: inline;">Edits Allocation</h1> 
-        {% if request.session.django_timezone %}
+        {% comment %} {% if request.session.django_timezone %}
             <div class="dropdown" style="display: inline; position: absolute; right: 2.5%;" >
                     <button class="btn btn-warning dropdown-toggle" type="button" data-toggle="dropdown">Change Timezone
                     <span class="caret"></span></button>
@@ -67,7 +67,7 @@ crossorigin="">
                     <p id='timezone-display'><b>All times are on {{request.session.django_timezone}}</b>.</p>   
 
             </div>
-        {% endif %}
+        {% endif %} {% endcomment %}
     </div>
            
     <hr/>
@@ -199,7 +199,7 @@ crossorigin="">
                     // Save it!
                     changesSaved = true;
                     $.ajax({
-                        url: "{% url 'store-changes' %}",
+                        url: "{% url 'wopr:store-changes' %}",
                         data:{
                             changesArray: JSON.stringify(changesArray),
                             csrfmiddlewaretoken: '{{ csrf_token }}',
@@ -308,7 +308,7 @@ crossorigin="">
 
               // Synchronous call to the server to save components in user session
               $.ajax({
-                url: "{% url 'store-session-data' %}",
+                url: "{% url 'wopr:store-session-data' %}",
                 data:{
                     ts_start_global: '{{ts_start_global}}',
                     ts_end_global: '{{ts_end_global}}',
@@ -341,7 +341,7 @@ crossorigin="">
             else {
 
               $.ajax({
-                url: "{% url 'store-session-data' %}",
+                url: "{% url 'wopr:store-session-data' %}",
                 data:{
                   ts_start_global: '{{ts_start_global}}',
                   ts_end_global: '{{ts_end_global}}',
@@ -445,7 +445,7 @@ crossorigin="">
 
                     // Asynchronous data fetch call to the server
                     $.ajax({
-                      url: "{% url 'ajax_TenMinuteData' %}",
+                      url: "{% url 'wopr:ajax_TenMinuteData' %}",
                       data:{
                           "ts_start_from": '{{ts_start_global}}',
                           "ts_until": '{{ts_end_global}}',
@@ -804,7 +804,7 @@ crossorigin="">
       {% else %}
 
     <div>
-      <form action="/dashboard/{{request.session.siteid}}/" method="post">
+      <form action="/wopr/dashboard/{{request.session.siteid}}/" method="post">
         {% csrf_token %}
         {% include 'wopr/widgets/bs4_form.html' with form=form %}
         <button type="submit" class="btn btn-primary">Submit</button>
@@ -818,7 +818,6 @@ crossorigin="">
       const databaseName = 'data_storage';
       var req = indexedDB.deleteDatabase(databaseName);
       req.onsuccess = function () {
-          console.log("Deleted database successfully");
       };
       req.onerror = function () {
           console.log("Couldn't delete database");
@@ -833,7 +832,7 @@ crossorigin="">
     <!-- Else if the siteID has not been selected yet-->
     {% elif siteSelectionForm %}
     <div>
-      <form action="{% url 'dashboard' %}" method="post">
+      <form action="{% url 'wopr:dashboard' %}" method="post">
           {% csrf_token %}
           {{ siteSelectionForm }}
           <input class='btn-success' type="submit" value="Select">

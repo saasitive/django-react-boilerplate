@@ -86,7 +86,7 @@ def selectSite(request):
 
             form = SiteSelectionForm()
 
-            return HttpResponseRedirect('/dashboard/' + str(siteid))
+            return HttpResponseRedirect('/wopr/dashboard/' + str(siteid))
             
         return render(request, 'wopr/selectSite.html', {'form': form,  'title': 'Select a Site', 'message': 'Please make sure to enter a valid site id.'})
 
@@ -213,13 +213,13 @@ def dashboardSelectSite(request):
 
             siteSelectionForm = SiteSelectionForm()
 
-            return HttpResponseRedirect('/dashboard/' + str(siteid))
+            return HttpResponseRedirect('/wopr/dashboard/' + str(siteid))
             
         return render(request, 'wopr/dashboard.html', {'siteSelectionForm': siteSelectionForm,  'title': 'Edits Allocation'})
 
 # Get the edits allocation turbine data for the siteID 'site'
 def dashboard(request, site):
-    start = time.clock()
+    start = time.time()
 
     # Get the colors corresponding to state and system from utils.py
     stateColorScheme = getStateColors()
@@ -260,10 +260,10 @@ def dashboard(request, site):
             id_from, id_till = request.session['turbine_range'].split('-')
 
             currentDir = os.getcwd()
-            with open(currentDir + '\\edits\\templates\\locations\\siteLocations.json') as file:
+            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/siteLocations.json') as file:
                 site_locations = json.load(file)
 
-            with open(currentDir + '\\edits\\templates\\locations\\turbineLocations.json') as file:
+            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/turbineLocations.json') as file:
                 turbine_locations = json.load(file)
 
             filtered_site = {}
@@ -271,7 +271,7 @@ def dashboard(request, site):
              # Create the filterdashboard form
             filterDashboardForm = FilterDashboardForm(siteid=site, id_from=id_from, id_till=id_till)
 
-            end = time.clock()
+            end = time.time()
             print('Call to dashboard took ', (end - start) , " seconds and {} queries.".format(len(connection.queries)))
 
             # Return the dictionary with the list of turbine information            
@@ -310,10 +310,10 @@ def dashboard(request, site):
 
             # Map
             currentDir = os.getcwd()
-            with open(currentDir + '\\edits\\templates\\locations\\siteLocations.json') as file:
+            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/siteLocations.json') as file:
                 site_locations = json.load(file)
 
-            with open(currentDir + '\\edits\\templates\\locations\\turbineLocations.json') as file:
+            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/turbineLocations.json') as file:
                 turbine_locations = json.load(file)
 
             filtered_site = {}
@@ -321,7 +321,7 @@ def dashboard(request, site):
             # Create the filterdashboard form
             filterDashboardForm = FilterDashboardForm(siteid=site, id_from=form.cleaned_data['view_turbines_from'], id_till=form.cleaned_data['view_turbines_till'])
 
-            end = time.clock()
+            end = time.time()
             print('Call to dashboard took ', (end - start) , " seconds and {} queries.".format(len(connection.queries)))
 
             # Return the dictionary with the list of turbine information            
@@ -338,7 +338,7 @@ def dashboard(request, site):
 
 def ajaxTenMinuteData(request):
     if(request.method == "GET"):
-        start = time.clock()
+        start = time.time()
 
         if(request.GET.get('tz')):
             request.session['django_timezone'] = request.GET.get('tz')
@@ -383,16 +383,6 @@ def ajaxTenMinuteData(request):
                 energy_query_set = each_turbine_energy.tenergydata_set.all().order_by("ts").exclude(kw_net__isnull=True).exclude(kw_exp__isnull=True).exclude(nws__isnull=True)
                 event_query_set = each_turbine_event.teventdata_set.all().order_by("ts_start")
 
-
-                event_query_set = [event for event in event_query_set if event.ts_start >= ts_start_UTC
-                                        and event.ts_start <= ts_until_UTC]
-
-                energy_query_set = [energy for energy in energy_query_set if energy.ts >= ts_start_UTC 
-                                    and energy.ts <= ts_until_UTC]
-
-                if not len(event_query_set):
-                    return JsonResponse({'status': 0, 'message': "There were no data for the date ranges."}, safe=False)
-
                 
                 innerList = []
                 current_state = ''
@@ -410,13 +400,15 @@ def ajaxTenMinuteData(request):
 
             rawDataList.append(dictionary)
         
+        if not len(rawDataList):
+            return JsonResponse({'status': 0, 'message': "There were no data for the date ranges."}, safe=False)
             
-        end = time.clock()
+        end = time.time()
         print('It took ', (end - start) , " seconds and {} queries.".format(len(connection.queries)))
 
         # JSON serializer
 
-        return JsonResponse({'status': 1,'rawDataList': json.dumps(rawDataList,cls=DjangoJSONEncoder), 'ts_start_global': ts_start_UTC.__str__(), 'ts_end_global': ts_until_UTC.__str__()})
+        return JsonResponse({'status': 1,'rawDataList': json.dumps(rawDataList,cls=DjangoJSONEncoder), 'ts_start_global': '2012-03-09 00:00:00+00:00', 'ts_end_global': '2012-03-16 00:00:00+00:00'})
 
     return JsonResponse({'status': 0, 'message': "Your data request was invalid."}, safe=False)
 

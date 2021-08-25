@@ -3,7 +3,7 @@
     <div class="container-fluid">
       <!-- Breadcrumbs -->
       <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
         <li class="breadcrumb-item active">Recurring Faults</li>
       </ol>
 
@@ -11,7 +11,7 @@
       <h1>Recurring Faults</h1>
       <hr />
       <div>
-        <form action="{% url 'recurFault-report' %}" method="post">
+        <form action="{% url 'wopr:recurFault-report' %}" method="post">
             {% csrf_token %}
             {{ form }}
             <input class='btn-success' type="submit" value="Submit">

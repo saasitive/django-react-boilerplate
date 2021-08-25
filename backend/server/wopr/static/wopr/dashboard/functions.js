@@ -724,8 +724,10 @@ function hideMenu(){
 
   }
 
-  goldenLayout.destroy();
-  goldenLayout.init();
+  if(goldenLayout){
+    goldenLayout.destroy();
+    goldenLayout.init();
+  }
   
   if(tooltip){
     tooltip.style('display', 'none');

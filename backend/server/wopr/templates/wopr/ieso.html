@@ -3,14 +3,14 @@
     <div class="container-fluid">
         <!-- Breadcrumbs -->
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
             <li class="breadcrumb-item active">IESO File Upload</li>
         </ol>
 
         <!-- Page Content -->
         <h1>IESO file upload</h1>
         <hr />
-        <form action="{% url 'iesoUpload' %}" method="POST" enctype="multipart/form-data">
+        <form action="{% url 'wopr:iesoUpload' %}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <br>
             {% if form.errors %}
@@ -32,14 +32,14 @@
             <br><br>
             <ul style="list-style-type: none; text-align: left">
                 <li style="display: inline-block">
-                    <form action="{% url 'iesoUpload' %}" method="POST">
+                    <form action="{% url 'wopr:iesoUpload' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="answered" value="{{file}}">
                         <input class='btn-success' style="margin: 10px" type="submit" value="Yes">
                     </form>
                 </li>
                 <li style="display: inline-block">
-                    <form action="{% url 'iesoUpload' %}" method="GET">
+                    <form action="{% url 'wopr:iesoUpload' %}" method="GET">
                         <input class='btn-success' style="margin: 10px" type="submit" value="No">
                     </form>
                 </li>
@@ -69,14 +69,14 @@
             <br><br>
             <ul style="list-style-type: none; text-align: left">
                 <li style="display: inline-block">
-                    <form action="{% url 'iesoUpload' %}" method="POST">
+                    <form action="{% url 'wopr:iesoUpload' %}" method="POST">
                         {% csrf_token %}
                         <input type="hidden" name="accepted_scripts" id="accepted_scripts" value="{{result}}">
                         <input class='btn-success' style="margin: 10px" type="submit" value="Accept">
                     </form>
                 </li>
                 <li style="display: inline-block">
-                    <form action="{% url 'iesoUpload' %}" method="GET">
+                    <form action="{% url 'wopr:iesoUpload' %}" method="GET">
                         <input class='btn-success' style="margin: 10px" type="submit" value="Reject">
                     </form>
                 </li>

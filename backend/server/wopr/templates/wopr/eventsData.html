@@ -1,10 +1,10 @@
-{% extends 'wopr/layout.html' %} {% load staticfiles %} {%block content %}
+{% extends 'wopr/layout.html' %} {% load static %} {%block content %}
 
 <div id="content-wrapper">
   <div class="container-fluid">
     <!-- Breadcrumbs -->
     <ol class="breadcrumb">
-      <li class="breadcrumb-item"><a href="{% url 'index' %}">Dashboard</a></li>
+      <li class="breadcrumb-item"><a href="{% url 'wopr:index' %}">Dashboard</a></li>
       {% if request.session.siteid %}
       <li class="breadcrumb-item">Site {{request.session.siteid}}</li>
       {% endif %}
@@ -105,7 +105,7 @@
           var ts_until_value = $("#end_date").val() + " " + $("#end_time").val();
   
           $.ajax({
-            url: "{% url 'filter-event' %}",
+            url: "{% url 'wopr:filter-event' %}",
             data:{
                 "ts_start_from": ts_start_from_value,
                 "ts_until": ts_until_value,
@@ -172,7 +172,7 @@
           $('#siteResults').empty();
   
           $.ajax({
-            url: "{% url 'ajaxT_sites' %}",
+            url: "{% url 'wopr:ajaxT_sites' %}",
             data: {"siteid": $("#siteid").val()},
             type: "GET",
             success: function (dataFromTemplate) {

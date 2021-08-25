@@ -45,12 +45,10 @@ class TimeRangeForm(forms.Form):
 
 
 class SiteSelectionForm(forms.Form):
-    site_id = forms.CharField(label='Site', widget=forms.Select(choices=[])) # this needs to be a list from the database... kinda like below birth year picker
-
 
     def __init__(self, *args, **kargs):
         super().__init__( *args, **kargs )
-        self.fields[ 'site_id' ].choices = makeSiteList()
+        self.fields[ 'site_id' ] = forms.ChoiceField( label = 'Site', choices = makeSiteList() )
 
 class SiteTurbineTimeForm(forms.Form):
     site_id = forms.CharField(widget=forms.Select(choices=[]))

@@ -49,6 +49,16 @@ export class Project extends Component{
             )
         });
 
+        let local = data['Local'];
+        let demo = data['Live Demo'];
+
+        if(local){
+            demo.forEach( function( d, index ){
+                demo[index] = window.location.href + demo[index];
+            });
+        }
+
+
         return(
             //<ScrollAnimation key={key} animateOnce={true} animateIn="fadeIn">
             <div key={key}>
@@ -61,6 +71,15 @@ export class Project extends Component{
                             <div className="col-sm-6 project-image-div" >
                                 <img className="project-image" src={process.env.PUBLIC_URL + data['Project Image Path']} alt={state.contentType + '-' + 'image'}></img>
                             </div>
+                        </div>
+                        <div className="col-sm-1"></div>
+                        <div className="col-sm-1"></div>
+                        <div className="col-sm-10">
+                            <p className="project-text"><b>Live Demo: </b>
+                                {demo.map( function( d, index ){
+                                    return <a key={index} href={d}>{d}</a>
+                                })}
+                            </p>
                         </div>
                         <div className="col-sm-1"></div>
                         <div className="col-sm-1"></div>

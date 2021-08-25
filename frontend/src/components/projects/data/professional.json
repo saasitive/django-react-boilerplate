@@ -8,6 +8,11 @@
             "Role": "Junior Developer (Remote Position)",
             "Technologies Used": "( Django, PostgreSQL, AWS, GitLab )"
         },
+        "Local": false,
+        "Live Demo": [
+            "https://stoney.nationnav.ca\n",
+            "https://hgsresources.ca"
+        ],
         "Project Image Path": "/img/projects/NationNav.png",
         "Project Description": [
             "Nation Navigator is a web application used by the employees of H.G. Smith and Associates as a means of achieving everyday company tasks.",
@@ -38,6 +43,8 @@
             "Role": "Software Engineering Student",
             "Technologies Used": "( Django, MSSQL, D3.js, HandsOnTable.js, GitHub )"
         },
+        "Local": true,
+        "Live Demo": [ "wopr/" ],
         "Project Image Path": "/img/projects/WOPR.png", 
         "Project Description": [
             "The WOPR was a web application design proposition to TransAlta's Performance Engineering Team as part of the University of Calgary's Engineering Capstone Design Program.",

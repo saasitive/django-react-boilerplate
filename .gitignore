@@ -135,3 +135,5 @@ backend/server/manage2.py
 docker/db/init.sql
 backend/server/django_static/
 backend/server/wopr/migrations/data.sql
+docker/nginx/local/
+docker-local.yml

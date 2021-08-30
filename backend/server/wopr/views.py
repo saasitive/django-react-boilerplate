@@ -259,11 +259,10 @@ def dashboard(request, site):
 
             id_from, id_till = request.session['turbine_range'].split('-')
 
-            currentDir = os.getcwd()
-            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/siteLocations.json') as file:
+            with open(djangoSettings.BASE_DIR + 'wopr/templates/wopr/locations/siteLocations.json') as file:
                 site_locations = json.load(file)
 
-            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/turbineLocations.json') as file:
+            with open(djangoSettings.BASE_DIR + 'wopr/templates/templates/wopr/locations/turbineLocations.json') as file:
                 turbine_locations = json.load(file)
 
             filtered_site = {}
@@ -309,11 +308,10 @@ def dashboard(request, site):
             print('Form received: ', ts_start_global, ts_end_global, turbine_range)
 
             # Map
-            currentDir = os.getcwd()
-            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/siteLocations.json') as file:
+            with open(djangoSettings.BASE_DIR + 'wopr/templates/wopr/locations/siteLocations.json') as file:
                 site_locations = json.load(file)
 
-            with open(currentDir + '/backend/server/wopr/templates/wopr/locations/turbineLocations.json') as file:
+            with open(djangoSettings.BASE_DIR + 'wopr/templates/wopr/locations/turbineLocations.json') as file:
                 turbine_locations = json.load(file)
 
             filtered_site = {}

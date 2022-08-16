@@ -45,3 +45,8 @@ More articles coming soon!
 <kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/login.png" /></kbd>
 
 <kbd><img src="https://raw.githubusercontent.com/saasitive/media/main/dashboard.png" /></kbd>
+
+
+### Infrastructure model
+
+![Insfrastructure model](.infragenie/infrastructure_model.png)

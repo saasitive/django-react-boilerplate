@@ -1,26 +1,26 @@
 # DIY Django and React Boilerplate for SaaS
 
-It is do-it-yourself Django + React Boilerplate for starting your SaaS application. In existing boilerplates for Django+React (or just for Django) there are very often too many features provided (do you really need traefik for MVP?). So before starting, you need to remove a lot of functionality that you don't need or simply don't understand. 
+It is a do-it-yourself Django + React Boilerplate for starting your SaaS application. In existing boilerplates for Django+React (or just for Django), there are very often too many features provided (do you really need traffik for MVP?). So before starting, you need to remove a lot of functionality that you don't need or simply don't understand. 
 
-I decided to create a simple Django+React boilerplate with step-by-step instructions how to build it. During building you can decide what you need or not. And for sure you learn a lot about Django and React. I hope it will provide good and quick starting point for creating SaaS applications. I would like to create real SaaS applications based on this boilerplate with step-by-step tutorials how they were created. They will be available at [SaaSitive](https://saasitive.com) website.
+I decided to create a simple Django+React boilerplate with step-by-step instructions on how to build it. During building, you can decide what you need or not. And for sure, you learn a lot about Django and React. I hope it will provide a good and quick starting point for creating SaaS applications. I want to create real SaaS applications based on this boilerplate with step-by-step tutorials on how they were created. They will be available on [SaaSitive](https://saasitive.com) website.
 
 ## Features (already implemented or planned)
 
 - Backend with Django Rest Framework
 - Frontend with React 
 - Bootstrap for styling
-- Deployment with docker-compose on single VPS
+- Deployment with docker-compose on a single VPS
 - SSL certificate from Let's encrypt
 - PostgreSQL database (not yet configured)
 - Authentication with DRF `authtoken` and [Djoser](https://djoser.readthedocs.io/en/latest/)
 - AWS SES for Email sending (not yet implemented)
 - python-decuple for secrets
 - Payments with Stripe (not yet implemented)
-- Step-by-step instructions how to deploy and how to update application
+- Step-by-step instructions on how to deploy and how to update the application
 
 ## Live Website
 
-You can play with this bolierplate at: [https://boilerplate.saasitive.com](https://boilerplate.saasitive.com) - deployed to t2.micro EC2 instance with docker-compose.
+You can play with this boilerplate at: [https://boilerplate.saasitive.com](https://boilerplate.saasitive.com) - deployed to t2.micro EC2 instance with docker-compose.
 
 ## Step-by-step instructions:
 1. [Starting SaaS with Django and React](https://saasitive.com/tutorial/django-react-boilerplate-saas/) (tag [v1](https://github.com/saasitive/django-react-boilerplate/tree/v1)) 

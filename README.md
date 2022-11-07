@@ -17,10 +17,7 @@ I decided to create a simple Django+React boilerplate with step-by-step instruct
 - python-decuple for secrets
 - Payments with Stripe (not yet implemented)
 - Step-by-step instructions on how to deploy and how to update the application
-
-## Live Website
-
-You can play with this boilerplate at: [https://boilerplate.saasitive.com](https://boilerplate.saasitive.com) - deployed to t2.micro EC2 instance with docker-compose.
+ 
 
 ## Step-by-step instructions:
 1. [Starting SaaS with Django and React](https://saasitive.com/tutorial/django-react-boilerplate-saas/) (tag [v1](https://github.com/saasitive/django-react-boilerplate/tree/v1)) 

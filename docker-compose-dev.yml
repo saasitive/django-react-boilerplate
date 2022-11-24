@@ -1,6 +1,14 @@
 version: '2'
 
 services:
+    db:
+        image: postgres:13.0-alpine
+        volumes:
+            - postgres_data:/var/lib/postgresql/data/
+        environment:
+            - POSTGRES_USER=hello_django
+            - POSTGRES_PASSWORD=hello_django
+            - POSTGRES_DB=hello_django_dev
     nginx: 
         restart: unless-stopped
         build:
@@ -18,14 +26,17 @@ services:
         build:
             context: .
             dockerfile: ./docker/backend/Dockerfile
-        volumes:
-            
         entrypoint: /app/docker/backend/wsgi-entrypoint.sh
         volumes:
             - .:/app
             - static_volume:/app/backend/server/django_static
         expose:
-            - 8000        
+            - 8000      
+        env_file:
+            - ./.env.dev
+        depends_on:
+            - db  
 
 volumes:
-    static_volume: {}
+    postgres_data: 
+    static_volume: 
